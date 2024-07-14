@@ -66,34 +66,10 @@ const getArtistByArtworkId = async (req, res) => {
 }
 
 
-const voteArtwork = async (req, res) => {
-  try {
-    const artworkId = req.params.id;
-
-    // Find artwork by ID and update votes
-    const artwork = await Artwork.findByIdAndUpdate(
-      artworkId,
-      { $inc: { votes: 1 } }, // Increment votes by 1
-      { new: true } // Return updated artwork
-    );
-
-    if (!artwork) {
-      return res.status(404).json({ message: "Artwork not found" });
-    }
-
-    res.status(200).json(artwork);
-  } catch (error) {
-    res.status(400).json({ message: "Failed to vote for artwork", error });
-  }
-};
-
-
-
 module.exports = {
   createArtwork,
   getArtworks,
   getArtworkById,
-  voteArtwork,
   getArtistByArtworkId
 };
 

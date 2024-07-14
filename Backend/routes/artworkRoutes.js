@@ -18,6 +18,6 @@ router.route('/:id').get(artworkController.getArtworkById);
 
 router.route("/artist/:id").get(artworkController.getArtistByArtworkId);
 
-router.route("/:id/vote").post(artworkController.voteArtwork);
+router.route("/:id/vote").get(authController.protect , authController.voteArtwork);
 
 module.exports = router;

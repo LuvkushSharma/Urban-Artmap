@@ -7,6 +7,7 @@ const User = require(path.join(__dirname, "/../models/user.model"));
 const catchAsync = require(path.join(__dirname, "/../utils/catchAsync"));
 const AppError = require(path.join(__dirname, "./../utils/appError"));
 const Email = require(path.join(__dirname, "./../utils/email"));
+const Artwork = require(path.join(__dirname, "./../models/Artwork.js"));
 
 const { randomInt } = require("crypto");
 
@@ -93,6 +94,7 @@ exports.logout = (req, res, next) => {
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
 
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -102,6 +104,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.cookies.jwt;
   }
 
+  
   // their is no token
   if (!token) {
     return next(
@@ -301,4 +304,28 @@ exports.contactUs = catchAsync(async (req, res, next) => {
 
   await new Email(userDetails).sendIssues();
 });
+
+exports.voteArtwork = async (req, res) => {
+  const artworkId = req.params.id;
+  const userId = req.user._id; 
+
+  try {
+    // Check if the user has already voted for this artwork
+    const artwork = await Artwork.findById(artworkId);
+    if (artwork.voters.includes(userId)) {
+      return res.status(400).json({ message: 'You have already voted for this artwork.' });
+    }
+
+    // Update votes and add user to voters array
+    artwork.votes++;
+    artwork.voters.push(userId);
+    await artwork.save();
+
+    res.json({ votes: artwork.votes });
+
+  } catch (error) {
+    console.error('Error voting:', error);
+    res.status(500).json({ message: 'Failed to vote for artwork.' });
+  }
+}
 

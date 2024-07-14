@@ -721,7 +721,6 @@ export default ArtworkMap;
 */
 
 // v-5
-
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -744,11 +743,23 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
+import {
+  WhatsappShareButton,
+  WhatsappIcon,
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  EmailShareButton,
+  EmailIcon,
+  InstapaperShareButton,
+  InstapaperIcon,
+} from "react-share";
+
 
 const ArtworkMap = () => {
   const [loading, setLoading] = useState(false);
@@ -756,6 +767,12 @@ const ArtworkMap = () => {
   const [artworks, setArtworks] = useState([]);
   const [selectedArtwork, setSelectedArtwork] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [mapCenter, setMapCenter] = useState(() => {
+    const lastVisitedMarker = localStorage.getItem("lastVisitedMarker");
+    return lastVisitedMarker ? JSON.parse(lastVisitedMarker) : [51.505, -0.09]; // Default center
+  });
+
+  const [votingError, setVotingError] = useState(false);
 
   const Navigate = useNavigate();
 
@@ -820,6 +837,11 @@ const ArtworkMap = () => {
 
   const handleMarkerClick = (artwork) => {
     setSelectedArtwork(artwork);
+    setMapCenter([artwork.latitude, artwork.longitude]);
+    localStorage.setItem(
+      "lastVisitedMarker",
+      JSON.stringify([artwork.latitude, artwork.longitude])
+    ); // Store coordinates in localStorage
   };
 
   const handleCloseDialog = () => {
@@ -832,9 +854,16 @@ const ArtworkMap = () => {
 
   const handleVote = async (artworkId) => {
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         `http://localhost:3000/api/v1/artworks/${artworkId}/vote`
-      );
+        , {
+          headers: {
+            'Access-Control-Allow-Origin': '*', 
+            'Content-Type': 'application/json'
+          }, 
+          withCredentials: true
+        });
+
       const updatedArtwork = response.data;
       setArtworks((prevArtworks) =>
         prevArtworks.map((artwork) =>
@@ -848,8 +877,8 @@ const ArtworkMap = () => {
         setSelectedArtwork({ ...selectedArtwork, votes: updatedArtwork.votes });
       }
     } catch (error) {
-      console.error("Error voting:", error);
-      setError("Failed to vote for artwork.");
+      // console.error("Error voting:", error);
+      setVotingError(true);
     }
   };
 
@@ -861,8 +890,8 @@ const ArtworkMap = () => {
       const artistId = response.data._id;
       Navigate(`/artist/${artistId}`);
     } catch (error) {
-      console.error("Error voting:", error);
-      setError("Failed to vote for artwork.");
+      console.error("Error viewing artist profile:", error);
+      setError("Failed to view artist profile.");
     }
   };
 
@@ -881,8 +910,23 @@ const ArtworkMap = () => {
             </Backdrop>
           )}
           {error && <Alert severity="error">{error}</Alert>}
+          {votingError && <Snackbar
+            open={votingError}
+            autoHideDuration={6000}
+            onClose={() => setVotingError(false)}
+            message="Already voted for this artwork"
+            action={
+              <IconButton
+                size="small"
+                color="inherit"
+                onClick={() => setVotingError(false)}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            }
+          />}
           <MapContainer
-            center={[51.505, -0.09]} // Centered on London for a more realistic starting point
+            center={mapCenter} // Use mapCenter state for the center position
             zoom={13} // Increased zoom level for a better view
             style={{ height: "600px", width: "100%" }} // Increased height for a larger map
           >
@@ -955,6 +999,34 @@ const ArtworkMap = () => {
                                   View Artist Profile
                                 </Button>
                               </Box>
+                              <Box mt={2}>
+                                <Typography variant="body2" color="textSecondary">
+                                  Share:
+                                </Typography>
+                                <Box mt={1} display="flex" justifyContent="space-around">
+                                  <WhatsappShareButton
+                                    url={window.location.href}
+                                    title={`Check out this artwork: ${artwork.title}`}
+                                    separator=" :: "
+                                  >
+                                    <WhatsappIcon size={32} round />
+                                  </WhatsappShareButton>
+                                  <FacebookShareButton
+                                    url={window.location.href}
+                                    quote={`Check out this artwork: ${artwork.title}`}
+                                    hashtag="#ArtworkMap"
+                                  >
+                                    <FacebookIcon size={32} round />
+                                  </FacebookShareButton>
+                                  <TwitterShareButton
+                                    url={window.location.href}
+                                    title={`Check out this artwork: ${artwork.title}`}
+                                  >
+                                    <TwitterIcon size={32} round />
+                                  </TwitterShareButton>
+                                  {/* Add more sharing buttons as needed */}
+                                </Box>
+                              </Box>
                             </Box>
                           </CardContent>
                         </Card>
@@ -999,7 +1071,7 @@ const ArtworkMap = () => {
                 <Card sx={{ maxWidth: 600 }}>
                   <CardMedia
                     component="img"
-                    height="400"
+                    height="300"
                     image={selectedArtwork.imageUrl}
                     alt={selectedArtwork.title}
                   />
@@ -1042,6 +1114,34 @@ const ArtworkMap = () => {
                           View Artist Profile
                         </Button>
                       </Box>
+                      <Box mt={2}>
+                        <Typography variant="body2" color="textSecondary">
+                          Share:
+                        </Typography>
+                        <Box mt={1} display="flex" justifyContent="space-around">
+                          <WhatsappShareButton
+                            url={window.location.href}
+                            title={`Check out this artwork: ${selectedArtwork.title}`}
+                            separator=" :: "
+                          >
+                            <WhatsappIcon size={32} round />
+                          </WhatsappShareButton>
+                          <FacebookShareButton
+                            url={window.location.href}
+                            quote={`Check out this artwork: ${selectedArtwork.title}`}
+                            hashtag="#ArtworkMap"
+                          >
+                            <FacebookIcon size={32} round />
+                          </FacebookShareButton>
+                          <TwitterShareButton
+                            url={window.location.href}
+                            title={`Check out this artwork: ${selectedArtwork.title}`}
+                          >
+                            <TwitterIcon size={32} round />
+                          </TwitterShareButton>
+                          {/* Add more sharing buttons as needed */}
+                        </Box>
+                      </Box>
                     </Box>
                   </CardContent>
                 </Card>
@@ -1059,3 +1159,4 @@ const ArtworkMap = () => {
 };
 
 export default ArtworkMap;
+

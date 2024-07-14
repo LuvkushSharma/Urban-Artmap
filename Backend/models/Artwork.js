@@ -31,7 +31,8 @@ const artworkSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  votes: { type: Number, default: 0 }
+  votes: { type: Number, default: 0 },
+  voters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Arrays of user IDs who voted
 });
 
 const Artwork = mongoose.model('Artwork', artworkSchema);
