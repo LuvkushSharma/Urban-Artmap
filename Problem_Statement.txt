@@ -1,0 +1,57 @@
+Create a project :-
+
+Crowdsourced Urban Art Map:
+
+
+Context :-
+Urban art , including graffiti , murals , and street installations , often goes undocumented and underappreciated due to its ephemeral nature and lack of visibility. This project aims to create a platform where urban art enthusiasts can document , share, and explore urban artworks from around the world , preserving them digitally for a global audience.
+
+Objective:
+The objective of this project is to develop a crowdsourced urban art map that allows users to document and share urban art, making it accessible to everyone. It aims to create a community -driven platform that celebrates and preserves urban art, providing a comprehensive and interactive experience for users to discover and engage with street art.
+
+Key features :-
+
+1. User Profile : Users can create profiles , upload photos of urban art, and provide descriptions.
+2. Geotagging : Artworks can be geotagged to specific locations, allowing users to explore urban art on an interactive map.
+3. Art Descriptions : Users can add details about the artwork, including the artist, date and story behind the piece.
+
+4. Community Voting : Users can vote on their favorite artworks , helping to highlight popular and significant pieces.
+5. Social Sharing : Users can share urban art discoveries on social media platform.
+6. Artists Profile : Artists can claim their work, create profiles, and interact with the community.
+
+
+
+Key Challenges
+
+1. Accurate Geotagging : Ensuring the accuracy of geotagged locations to provide reliable navugation for users.
+
+2. Data Validation : Implementing measures to verify the authenticity and quality of uploaded content.
+
+3. User Engagement : Designing features that encourage user participation and contribution.
+
+4. Performance Optimization : Ensuring the platform performs well with a potentially large and growing database of images and geolocation.
+
+5. Security : Protecting user data and preventing unauthorized access or misuse of the platform.
+
+
+Learning Objectives
+
+1. Frontend Development: Learn frontend technologies such as React, Express.js, or Material UI.
+
+2. Backend Development: Implement backend functionalities for user authentication, data storage, and geolocation services using Node.js and Express, and handle image uploads with Multer.
+
+3. User Experience Design: Gain insights into designing user-friendly interfaces for exploring and interacting with a large database of geotagged images.
+
+4. Project Management: Experience managing a complex project within a limited timeframe, prioritizing features, and meeting deliverables.
+
+
+Deliverables
+
+1. Crowdsourced Urban Art Map Platform: A fully functional web application with user profiles, geotagged urban art, and community engagement features.
+
+2. Documentation: Clear documentation outlining the project architecture, technologies used, and instructions for future development or maintenance.
+
+3. Presentation: A concise presentation summarizing the project concept, key features, challenges faced, and lessons learned during the development process.
+
+
+Using react , nodes js , express js and mongodb
