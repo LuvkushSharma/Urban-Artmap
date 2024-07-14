@@ -55,8 +55,6 @@ const SignupPage = () => {
         withCredentials: true
       });
       
-      // Handle successful response
-      console.log(response.data);
       setLoading(false);
 
       Navigate('/home');

@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Footer from "./components/Footer";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
+import ArtistProfile from "./components/ArtistProfile";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
             <Route path="/artwork-map" element={<ArtworkMap />} /> 
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<ContactUs />} />
+
+            <Route path="/artist/:artistId" element={<ArtistProfile />} />
 
             <Route path="*" element={<Oops />} />
           </Routes>

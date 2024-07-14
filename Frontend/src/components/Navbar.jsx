@@ -31,14 +31,16 @@ function Navbar() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState("");
-
+  
   const baseUrl = "http://localhost:3000";
 
   useEffect(() => {
     const getUserData = async () => {
       try {
         const userData = await fetchUserData();
+       
         setUser(userData);
+        setImageUrl(userData.cloudinaryImageUrl);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);

@@ -10,9 +10,11 @@ const artworkSchema = new mongoose.Schema({
     required: true,
   },
   artist: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,  // Reference to User model ID
+    ref: 'User',  // Reference to the User model
     required: true,
   },
+
   date: {
     type: Date,
     required: true,

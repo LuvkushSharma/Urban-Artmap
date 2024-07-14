@@ -27,6 +27,7 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         const userData = await fetchUserData();
+        
         setName(userData.name);
         setEmail(userData.email);
         setImageUrl(userData.cloudinaryImageUrl);

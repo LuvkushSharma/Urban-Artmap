@@ -33,15 +33,38 @@ const getArtworks = async (req, res) => {
 
 const getArtworkById = async (req, res) => {
   try {
-    const artwork = await Artwork.findById(req.params.id);
+    // Find artwork by ID where artist matches the provided artist ID
+    const artworks = await Artwork.find({ artist: req.params.id });
+
+    if (!artworks || artworks.length === 0) {
+      return res.status(404).json({ message: 'No artworks found for this artist' });
+    }
+
+    res.status(200).json(artworks);
+  } catch (error) {
+    res.status(400).json({ message: 'Failed to fetch artworks', error });
+  }
+};
+
+
+const getArtistByArtworkId = async (req, res) => {
+
+  try {
+    const artwork = await Artwork.findById(req.params.id).populate('artist');
+
+    console.log('artwork : ', artwork);
+    
+
     if (!artwork) {
       return res.status(404).json({ message: 'Artwork not found' });
     }
-    res.status(200).json(artwork);
-  } catch (error) {
-    res.status(400).json({ message: 'Failed to fetch artwork', error });
+    res.status(200).json(artwork.artist);
   }
-};
+  catch (error) {
+    res.status(400).json({ message: 'Failed to fetch artist', error });
+  }
+}
+
 
 const voteArtwork = async (req, res) => {
   try {
@@ -71,6 +94,6 @@ module.exports = {
   getArtworks,
   getArtworkById,
   voteArtwork,
- 
+  getArtistByArtworkId
 };
 

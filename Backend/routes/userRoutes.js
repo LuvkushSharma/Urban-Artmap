@@ -21,9 +21,16 @@ router.route("/logout").get(authController.logout);
 router.route("/checkAuth").get(authController.isLoggedIn);
 
 router.route("/profile").get(authController.protect, userController.getUser);
+
+router.route("/:id").get(userController.getUserById);
+
 router
   .route("/deleteMe")
   .delete(authController.protect, authController.deleteMe);
+
+router
+.route("/update")
+.patch(authController.protect, userController.updateUserSchema);
 
 
 router.route("/forgotPassword").post(authController.forgotPassword);
