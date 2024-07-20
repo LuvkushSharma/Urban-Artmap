@@ -114,6 +114,8 @@ function Navbar() {
       position="static"
       style={{
         background: `linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)`,
+        margin: 0,
+        padding: 0,
       }}
       enableColorOnDark
     >
@@ -134,25 +136,36 @@ function Navbar() {
               <MenuIcon />
             </IconButton>
           )}
-          <BusinessCenterSharpIcon
-            sx={{ color: "#fefae0", display: { md: "flex" }, mr: 1 }}
-          />
-          <Link to="/home" style={{ textDecoration: "none" }}>
-            <Typography
-              variant="h6"
-              noWrap
-              sx={{
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "#fefae0",
-                textAlign: "center",
-                margin: isMobile ? "auto" : "0",
-              }}
-            >
-              Art Map
-            </Typography>
-          </Link>
+          {!isMobile && (
+            <Link to="/home" style={{ textDecoration: "none" }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <img
+                  src="https://res.cloudinary.com/dx2vel6vy/image/upload/v1721455274/nhj7wc5hrqxlxfpr1lko.jpg"
+                  alt="Art Map Logo"
+                  style={{
+                    height: 50,
+                    width: 50,
+                    borderRadius: "50%",
+                    marginRight: 10,
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  noWrap
+                  sx={{
+                    fontFamily: "monospace",
+                    fontWeight: 700,
+                    letterSpacing: ".3rem",
+                    color: "#fefae0",
+                    textAlign: "center",
+                    margin: isMobile ? "auto" : "0",
+                  }}
+                >
+                  Urban Artmap
+                </Typography>
+              </Box>
+            </Link>
+          )}
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }}}>
             <Menu

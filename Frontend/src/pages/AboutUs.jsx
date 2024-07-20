@@ -1,8 +1,11 @@
 import React from 'react';
 import { Typography, Container, Grid, Box, Link } from '@mui/material';
+import Navbar from '../components/Navbar';
 
 function AboutUs() {
   return (
+    <>
+    <Navbar />
     <Container maxWidth="lg">
       <Grid container spacing={4}>
         <Grid item xs={12}>
@@ -70,6 +73,7 @@ function AboutUs() {
         </Grid>
       </Grid>
     </Container>
+    </>
   );
 }
 

@@ -15,6 +15,7 @@ import ContactUs from "./pages/ContactUs";
 import ArtistProfile from "./components/ArtistProfile";
 
 function App() {
+
   return (
     <>
       <main>
@@ -23,7 +24,7 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/" element={<LoginPage />} />
-            <Route path="/forgettingPassword" element={<ForgetPassword />} />
+             <Route path="/foregettingPassword" element={<ForgetPassword />} />
             <Route path="/resetPassword/:token" element={<ResetPassword />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/upload" element={<UploadArtworkScreen />} />

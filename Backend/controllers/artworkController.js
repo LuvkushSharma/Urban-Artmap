@@ -52,9 +52,6 @@ const getArtistByArtworkId = async (req, res) => {
   try {
     const artwork = await Artwork.findById(req.params.id).populate('artist');
 
-    console.log('artwork : ', artwork);
-    
-
     if (!artwork) {
       return res.status(404).json({ message: 'Artwork not found' });
     }

@@ -39,7 +39,6 @@ const Profile = () => {
   }, []);
 
   const handleImageChange = (event) => {
-    console.log("event.target.files[0]", event.target.files[0].name);
     setImage(event.target.files[0]);
   };
 
@@ -63,8 +62,6 @@ const Profile = () => {
 
       const cloudinaryImageUrl = response.data.secure_url; // Extract Cloudinary image URL
 
-      console.log("Image uploaded successfully:", cloudinaryImageUrl);
-
       // Update user schema with the Cloudinary image URL
       await axios.patch(
         `${baseUrl}/api/v1/users/update`,
@@ -77,8 +74,7 @@ const Profile = () => {
 
       setImageUrl(cloudinaryImageUrl);
       setUploading(false);
-      console.log("Image uploaded successfully:", response.data.imageUrl);
-      // Optionally, you can update the profile picture in the UI after successful upload
+    
     } catch (error) {
       console.error("Image upload failed:", error);
       setUploading(false);

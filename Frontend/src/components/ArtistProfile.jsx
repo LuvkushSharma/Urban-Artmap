@@ -8,6 +8,7 @@ import {
   Container,
   CircularProgress,
   Alert,
+  Snackbar,
   Card,
   CardContent,
   CardMedia,
@@ -16,6 +17,7 @@ import {
   Grid,
   Divider,
 } from '@mui/material';
+import Navbar from './Navbar';
 
 const ArtistProfile = () => {
   const { artistId } = useParams();
@@ -47,11 +49,7 @@ const ArtistProfile = () => {
 
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">Artist Profile</Typography>
-        </Toolbar>
-      </AppBar>
+      <Navbar />  
       <Container>
         <Box my={4}>
           {loading && <CircularProgress color="inherit" />}

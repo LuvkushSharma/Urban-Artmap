@@ -1096,13 +1096,9 @@ const UploadArtworkScreen = () => {
       const apiKey = "pk.dbab5bd47d3cb9cfc075ea5c8c1da39c";
       const response = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${query}&format=json&limit=1`);
   
-      // Log the entire response for debugging
-      console.log("Geocoding API response:", response.data);
-  
       if (response.data && response.data.length > 0) {
         const { lat, lon } = response.data[0];
-        console.log("Coordinates fetched:", lat, lon); // Debugging log
-  
+       
         setLatitude(parseFloat(lat));
         setLongitude(parseFloat(lon));
         return { lat: parseFloat(lat), lon: parseFloat(lon) }; // Return coordinates for further use
@@ -1219,8 +1215,7 @@ const UploadArtworkScreen = () => {
         longitude: coords.lng,
       };
 
-      console.log("Data being sent to backend:", data); // Debugging log
-
+     
       const res = await axios.post(
         "http://localhost:3000/api/v1/artworks",
         data,

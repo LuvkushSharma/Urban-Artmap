@@ -14,53 +14,64 @@ const LoginPage = () => {
   const [isFailed, setIsFailed] = useState(false);
   const [timerStarts, setTimerStarts] = useState(false);
 
-  const baseUrl = "http://localhost:3000";
-
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/v1/users/checkAuth" , {headers: {
-        'Access-Control-Allow-Origin': '*', 
-        'Content-Type': 'application/json'
-    }, withCredentials: true });
-        // navigate("/otp", { replace: true });
+        const res = await axios.get(
+          "http://localhost:3000/api/v1/users/checkAuth",
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
         navigate("/home", { replace: true });
-        
       } catch (error) {
         // console.error("User is not logged in");
       }
     };
 
     checkAuth();
-  }, []);
+  }, [navigate]);
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/api/v1/users/login", {
-        email,
-        password,
-      } , { headers: {
-        'Access-Control-Allow-Origin': '*', 
-        'Content-Type': 'application/json'
-    } , withCredentials: true });
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/users/login",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
 
       setIsFailed(false);
       setTimerStarts(true);
 
       setTimeout(() => {
         setTimerStarts(false);
-        // navigate("/otp", { replace: true });
         navigate("/home", { replace: true });
       }, 2000);
 
-      // Redirect to the home page or perform other actions on successful login
     } catch (error) {
+
       setIsFailed(true);
+      setTimeout(() => {
+        setIsFailed(false);
+      }, 2000);
+
       console.error(
         "Login failed:",
         error.response ? error.response.data.message : error.message
       );
-      // Handle login error
     }
   };
 
@@ -72,112 +83,157 @@ const LoginPage = () => {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         minHeight: "100vh",
-        backdropFilter: "blur(5px)", // Blur effect
-        position: "relative", // Make the parent relative for absolute positioning of child elements
+        flexDirection: "row",
+        overflow: "hidden",
+        position: "relative",
       }}
     >
       {/* Video Section */}
-      <video
-        src="/videos/loginPage.mp4"
-        autoPlay
-        loop
-        muted
-        style={{
-          width: "100%", // Video occupies full width of the screen
-          height: "100vh", // Video occupies full height of the screen
-          objectFit: "cover",
-          position: "fixed", // Fix the video position
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh",
+          position: "absolute",
           top: 0,
           left: 0,
+          zIndex: -1, // Send video to the back
+          overflow: "hidden",
         }}
-      />
+      >
+        <video
+          src="/videos/loginPage.mp4"
+          autoPlay
+          loop
+          muted
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </Box>
 
       {/* Login Form Section */}
       <Box
         sx={{
-          zIndex: 1, // Ensure login form is above the video
-          width: "300px", // Adjust the width of the login form as needed
+          width: {
+            xs: "100%", // Full width on extra-small screens
+          },
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "relative",
           padding: "2rem",
-          backgroundColor: "rgba(255, 255, 255, 0.3)", // Semi-transparent white background
-          position: "absolute",
-          textAlign: "center", // Center the content horizontally
-          borderRadius: "20px", // Rounded corners
-          boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)", // Add shadow effect
+          zIndex: 1,
         }}
       >
-        <Typography variant="h5" gutterBottom>
-          Login
-        </Typography>
-
-        <TextField
-          label="Email"
-          variant="outlined"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          margin="normal"
-          fullWidth
-          sx={{ marginBottom: "1rem" }} // Add margin bottom
-        />
-
-        <TextField
-          label="Password"
-          variant="outlined"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          margin="normal"
-          fullWidth
-          sx={{ marginBottom: "1rem" }} // Add margin bottom
-        />
-
-        {isFailed && (
-          <Alert severity="error" sx={{ marginBottom: "1rem" }}>
-            Please provide correct email and password.
-          </Alert>
-        )}
-
-        {timerStarts && (
-          <Alert severity="success" sx={{ marginBottom: "1rem" }}>
-            Login Successful!
-          </Alert>
-        )}
-
-        <Button
-          variant="contained"
-          onClick={handleLogin}
-          sx={{ marginRight: 1 }}
-          // color="secondary"
-          style={{ backgroundColor: "#495057" }}
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: "400px",
+            padding: "1rem",
+            backgroundColor: "white",
+            borderRadius: "20px",
+            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)",
+          }}
         >
-          Login
-        </Button>
-
-        <Button
-          variant="contained"
-          onClick={move}
-          style={{ backgroundColor: "#495057" }}
-        >
-          Signup
-        </Button>
-
-        <Typography
-          variant="body2"
-          sx={{ marginTop: "1rem", color: "#007bff" }}
-        >
-          <Link
-            to="/foregettingPassword"
-            style={{
-              textDecoration: "none",
-              color: "#050609",
+          <Box
+            sx={{
+              width: "100%",
+              height: "auto",
+              marginBottom: "0.9rem",
+              textAlign: "center",
             }}
           >
-            Forget Password?
-          </Link>
-        </Typography>
+            <video
+              src="https://designerapp.officeapps.live.com/designerapp/Media.ashx/?id=e19f9c37-e890-462c-91bc-bfb23bff0ac1.mp4&fileToken=636e9468-4312-4968-924b-9dacdf845648&dcHint=IndiaCentral"
+              autoPlay
+              loop
+              muted
+              style={{
+                width: "100%",
+                height: "auto",
+                borderRadius: "10px",
+              }}
+            />
+          </Box>
+
+          <Typography variant="h5" gutterBottom>
+            Login
+          </Typography>
+
+          <TextField
+            label="Email"
+            variant="outlined"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            margin="normal"
+            fullWidth
+            sx={{ marginBottom: "1rem" }}
+          />
+
+          <TextField
+            label="Password"
+            variant="outlined"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            margin="normal"
+            fullWidth
+            sx={{ marginBottom: "1rem" }}
+          />
+
+          {isFailed && (
+            <Alert severity="error" sx={{ marginBottom: "1rem" }}>
+              Please provide correct email and password.
+            </Alert>
+          )}
+
+          {timerStarts && (
+            <Alert severity="success" sx={{ marginBottom: "0.01rem" }}>
+              Login Successful!
+            </Alert>
+          )}
+
+          <Button
+            variant="contained"
+            onClick={handleLogin}
+            sx={{ marginRight: 1 }}
+            style={{ backgroundColor: "#495057" }}
+          >
+            Login
+          </Button>
+
+          {!timerStarts && (
+            <Button
+              variant="contained"
+              onClick={move}
+              style={{ backgroundColor: "#495057" }}
+            >
+              Signup
+            </Button>
+          )}
+
+          {isFailed || (!timerStarts && (
+            <Typography
+              variant="body2"
+              sx={{ marginTop: "1rem", color: "#007bff" }}
+            >
+              <Link
+                to="/foregettingPassword"
+                style={{
+                  textDecoration: "none",
+                  color: "#050609",
+                }}
+              >
+                Forget Password?
+              </Link>
+            </Typography>
+          ))}
+        </Box>
       </Box>
     </Box>
   );

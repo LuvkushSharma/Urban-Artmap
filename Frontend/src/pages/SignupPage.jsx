@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 import {
   Container,
   TextField,
@@ -11,18 +11,20 @@ import {
   CircularProgress,
   Typography,
   Alert,
-  Box
-} from '@mui/material';
+  Box,
+  Grid,
+  useMediaQuery,
+} from "@mui/material";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-    role: 'user'
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+    role: "user",
   });
 
   const [errors, setErrors] = useState({});
@@ -33,7 +35,7 @@ const SignupPage = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -45,20 +47,22 @@ const SignupPage = () => {
     setLoading(true);
     setErrors({});
 
-
     try {
-      const response = await axios.post(`${baseUrl}/api/v1/users/signup`, formData, {
-        headers: {
-          'Access-Control-Allow-Origin': '*', 
-          'Content-Type': 'application/json'
-        }, 
-        withCredentials: true
-      });
-      
+      const response = await axios.post(
+        `${baseUrl}/api/v1/users/signup`,
+        formData,
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
       setLoading(false);
 
-      Navigate('/home');
-      
+      Navigate("/home");
     } catch (error) {
       // Handle error response
       console.error(error);
@@ -67,126 +71,147 @@ const SignupPage = () => {
     }
   };
 
+  const isSmallScreen = useMediaQuery("(max-width:900px)");
+
   return (
-    <Container maxWidth="sm" sx={{ position: 'relative', zIndex: 2, mt: 5 }}>
-      <video
-        src="/videos/loginPage.mp4"
-        autoPlay
-        loop
-        muted
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          zIndex: -1
-        }}
-      />
-
-      <Box
-        sx={{
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          padding: 3,
-          borderRadius: 2,
-          boxShadow: 3
-        }}
+    <Grid container sx={{ height: "100vh" }}>
+     
+      {!isSmallScreen && ( // Conditionally render video
+        <Grid item xs={12} md={6} sx={{ position: "relative" }}>
+          <video
+            src="/videos/loginPage.mp4"
+            autoPlay
+            loop
+            muted
+            style={{
+              width: "100%",
+              height: "100vh",
+              objectFit: "cover",
+            }}
+          />
+        </Grid>
+      )}
+      <Grid
+        item
+        xs={12}
+        md={6}
+        container
+        direction="column" // Stack children vertically
+        justifyContent="center"
+        alignItems="center"
+        sx={{ padding: 3, overflowY: "auto" }} // Add vertical scrollbar
       >
-        <Typography variant="h4" component="h1" gutterBottom sx={{textAlign: "center"}}>
-          Sign Up
-        </Typography>
-
-        <form onSubmit={handleSubmit}>
-          <FormControl fullWidth margin="normal">
-            <TextField
-              label="Name"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              error={Boolean(errors.name)}
-              helperText={errors.name}
-              variant="outlined"
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal">
-            <TextField
-              label="Email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              error={Boolean(errors.email)}
-              helperText={errors.email}
-              variant="outlined"
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal">
-            <TextField
-              label="Password"
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              error={Boolean(errors.password)}
-              helperText={errors.password}
-              variant="outlined"
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal">
-            <TextField
-              label="Confirm Password"
-              type="password"
-              id="passwordConfirm"
-              name="passwordConfirm"
-              value={formData.passwordConfirm}
-              onChange={handleChange}
-              error={Boolean(errors.passwordConfirm)}
-              helperText={errors.passwordConfirm}
-              variant="outlined"
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="role-label">Role</InputLabel>
-            <Select
-              labelId="role-label"
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              variant="outlined"
-            >
-              <MenuItem value="user">User</MenuItem>
-              <MenuItem value="artist">Artist</MenuItem>
-            </Select>
-          </FormControl>
-
-
-          {errors.general && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {errors.general}
-            </Alert>
-          )}
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            disabled={loading}
-            sx={{ mt: 3 }}
+        <Container maxWidth="sm">
+          {" "}
+          {/* Add Container for maxWidth */}
+          <Box
+            sx={{
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              padding: 3,
+              borderRadius: 2,
+              boxShadow: 3,
+            }}
           >
-            {loading ? <CircularProgress size={24} /> : 'Sign Up'}
-          </Button>
-        </form>
-      </Box>
-    </Container>
+            <Typography
+              variant="h4"
+              component="h1"
+              gutterBottom
+              sx={{ textAlign: "center" }}
+            >
+              Sign Up
+            </Typography>
+
+            <form onSubmit={handleSubmit}>
+              <FormControl fullWidth margin="normal">
+                <TextField
+                  label="Name"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  error={Boolean(errors.name)}
+                  helperText={errors.name}
+                  variant="outlined"
+                />
+              </FormControl>
+
+              <FormControl fullWidth margin="normal">
+                <TextField
+                  label="Email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={Boolean(errors.email)}
+                  helperText={errors.email}
+                  variant="outlined"
+                />
+              </FormControl>
+
+              <FormControl fullWidth margin="normal">
+                <TextField
+                  label="Password"
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={Boolean(errors.password)}
+                  helperText={errors.password}
+                  variant="outlined"
+                />
+              </FormControl>
+
+              <FormControl fullWidth margin="normal">
+                <TextField
+                  label="Confirm Password"
+                  type="password"
+                  id="passwordConfirm"
+                  name="passwordConfirm"
+                  value={formData.passwordConfirm}
+                  onChange={handleChange}
+                  error={Boolean(errors.passwordConfirm)}
+                  helperText={errors.passwordConfirm}
+                  variant="outlined"
+                />
+              </FormControl>
+
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="role-label">Role</InputLabel>
+                <Select
+                  labelId="role-label"
+                  id="role"
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  variant="outlined"
+                >
+                  <MenuItem value="user">User</MenuItem>
+                  <MenuItem value="artist">Artist</MenuItem>
+                </Select>
+              </FormControl>
+
+              {errors.general && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  {errors.general}
+                </Alert>
+              )}
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={loading}
+                sx={{ mt: 3 }}
+              >
+                {loading ? <CircularProgress size={24} /> : "Sign Up"}
+              </Button>
+            </form>
+          </Box>
+        </Container>
+      </Grid>
+    </Grid>
   );
 };
 

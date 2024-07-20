@@ -3,7 +3,7 @@ import { Container, Grid, Typography, Button, Stack, Box, Divider } from '@mui/m
 import { useMediaQuery } from '@mui/material'; // Import directly from MUI
 
 import SearchIcon from '@mui/icons-material/Search';
-import BannerImage from '/dost.jpeg'; // Replace with your banner image
+import BannerImage from '/images/image2.jpeg'; // Replace with your banner image
 import Navbar from '../components/Navbar';
 
 const HomePage = () => {

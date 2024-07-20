@@ -721,14 +721,15 @@ export default ArtworkMap;
 */
 
 // v-5
+
+/*
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import exifr from "exifr";
 import axios from "axios";
 import {
-  AppBar,
-  Toolbar,
+
   Typography,
   Container,
   CircularProgress,
@@ -760,9 +761,12 @@ import {
   InstapaperIcon,
 } from "react-share";
 
+import Navbar from "./Navbar";
+
 
 const ArtworkMap = () => {
   const [loading, setLoading] = useState(false);
+  const [gotError, setGotError] = useState(false);
   const [error, setError] = useState(null);
   const [artworks, setArtworks] = useState([]);
   const [selectedArtwork, setSelectedArtwork] = useState(null);
@@ -806,6 +810,7 @@ const ArtworkMap = () => {
       } catch (error) {
         console.error("Error fetching artworks:", error);
         setError("Failed to fetch artworks.");
+        setGotError(true);
       } finally {
         setLoading(false);
       }
@@ -826,6 +831,7 @@ const ArtworkMap = () => {
       };
     } catch (error) {
       console.error("Error fetching GPS data:", error);
+      setGotError(true);
       throw error;
     }
   };
@@ -878,7 +884,8 @@ const ArtworkMap = () => {
       }
     } catch (error) {
       // console.error("Error voting:", error);
-      setVotingError(true);
+      setError("Already voted for this artwork.");
+      setGotError(true);
     }
   };
 
@@ -892,16 +899,13 @@ const ArtworkMap = () => {
     } catch (error) {
       console.error("Error viewing artist profile:", error);
       setError("Failed to view artist profile.");
+      setGotError(true);
     }
   };
 
   return (
     <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">Artwork Map</Typography>
-        </Toolbar>
-      </AppBar>
+      <Navbar />
       <Container>
         <Box my={4}>
           {loading && (
@@ -909,17 +913,16 @@ const ArtworkMap = () => {
               <CircularProgress color="inherit" />
             </Backdrop>
           )}
-          {error && <Alert severity="error">{error}</Alert>}
-          {votingError && <Snackbar
-            open={votingError}
+          {gotError && <Snackbar
+            open={gotError}
             autoHideDuration={6000}
-            onClose={() => setVotingError(false)}
-            message="Already voted for this artwork"
+            onClose={() => setGotError(false)}
+            message={error}
             action={
               <IconButton
                 size="small"
                 color="inherit"
-                onClick={() => setVotingError(false)}
+                onClick={() => setGotError(false)}
               >
                 <CloseIcon fontSize="small" />
               </IconButton>
@@ -1024,7 +1027,6 @@ const ArtworkMap = () => {
                                   >
                                     <TwitterIcon size={32} round />
                                   </TwitterShareButton>
-                                  {/* Add more sharing buttons as needed */}
                                 </Box>
                               </Box>
                             </Box>
@@ -1139,7 +1141,7 @@ const ArtworkMap = () => {
                           >
                             <TwitterIcon size={32} round />
                           </TwitterShareButton>
-                          {/* Add more sharing buttons as needed */}
+                          
                         </Box>
                       </Box>
                     </Box>
@@ -1160,3 +1162,513 @@ const ArtworkMap = () => {
 
 export default ArtworkMap;
 
+*/
+
+import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import exifr from "exifr";
+import axios from "axios";
+import {
+  Typography,
+  Container,
+  CircularProgress,
+  Alert,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Box,
+  Snackbar,
+  Backdrop,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
+import {
+  WhatsappShareButton,
+  WhatsappIcon,
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  EmailShareButton,
+  EmailIcon,
+  InstapaperShareButton,
+  InstapaperIcon,
+} from "react-share";
+
+import SearchIcon from "@mui/icons-material/Search";
+
+import Navbar from "./Navbar";
+
+const ArtworkMap = () => {
+  const [loading, setLoading] = useState(false);
+  const [gotError, setGotError] = useState(false);
+  const [error, setError] = useState(null);
+  const [artworks, setArtworks] = useState([]);
+  const [selectedArtwork, setSelectedArtwork] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [mapCenter, setMapCenter] = useState(() => {
+    const lastVisitedMarker = localStorage.getItem("lastVisitedMarker");
+    return lastVisitedMarker ? JSON.parse(lastVisitedMarker) : [51.505, -0.09]; // Default center
+  });
+
+  const [location, setLocation] = useState("");
+
+  const Navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchArtworks = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/artworks"
+        );
+        const artworksWithGPS = await Promise.all(
+          response.data.map(async (artwork) => {
+            try {
+              const gpsData = await fetchGPSData(artwork.imageUrl);
+              return {
+                ...artwork,
+                latitude: gpsData.latitude,
+                longitude: gpsData.longitude,
+              };
+            } catch (err) {
+              console.error(
+                `Error fetching GPS data for ${artwork.title}:`,
+                err
+              );
+              return artwork;
+            }
+          })
+        );
+        setArtworks(artworksWithGPS);
+        setSnackbarOpen(true);
+      } catch (error) {
+        console.error("Error fetching artworks:", error);
+        setError("Failed to fetch artworks.");
+        setGotError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArtworks();
+  }, []);
+
+  const fetchGPSData = async (imageUrl) => {
+    try {
+      const response = await axios.get(imageUrl, { responseType: "blob" });
+      const imageBlob = response.data;
+      const exifData = await exifr.gps(imageBlob);
+      if (!exifData) throw new Error("No EXIF GPS data found");
+      return {
+        latitude: exifData.latitude,
+        longitude: exifData.longitude,
+      };
+    } catch (error) {
+      console.error("Error fetching GPS data:", error);
+      setGotError(true);
+      throw error;
+    }
+  };
+
+  const clearArtworks = () => {
+    setArtworks([]);
+    setSnackbarOpen(true);
+  };
+
+  const handleMarkerClick = (artwork) => {
+    setSelectedArtwork(artwork);
+    setMapCenter([artwork.latitude, artwork.longitude]);
+    localStorage.setItem(
+      "lastVisitedMarker",
+      JSON.stringify([artwork.latitude, artwork.longitude])
+    ); // Store coordinates in localStorage
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedArtwork(null);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleVote = async (artworkId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/artworks/${artworkId}/vote`,
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      const updatedArtwork = response.data;
+      setArtworks((prevArtworks) =>
+        prevArtworks.map((artwork) =>
+          artwork._id === artworkId
+            ? { ...artwork, votes: updatedArtwork.votes }
+            : artwork
+        )
+      );
+      // Update selectedArtwork if it's the one being voted on
+      if (selectedArtwork && selectedArtwork._id === artworkId) {
+        setSelectedArtwork({ ...selectedArtwork, votes: updatedArtwork.votes });
+      }
+    } catch (error) {
+      // console.error("Error voting:", error);
+      setError("Already voted for this artwork.");
+      setGotError(true);
+    }
+  };
+
+  const handleProfile = async (artworkId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/artworks/artist/${artworkId}`
+      );
+      const artistId = response.data._id;
+      Navigate(`/artist/${artistId}`);
+    } catch (error) {
+      console.error("Error viewing artist profile:", error);
+      setError("Failed to view artist profile.");
+      setGotError(true);
+    }
+  };
+
+  const handleLocationChange = async () => {
+    try {
+      const query = encodeURIComponent(location);
+      const apiKey = "pk.dbab5bd47d3cb9cfc075ea5c8c1da39c";
+      const response = await axios.get(
+        `https://us1.locationiq.com/v1/search.php?key=${apiKey}&q=${query}&format=json&limit=1`
+      );
+
+      if (response.data && response.data.length > 0) {
+        const { lat, lon } = response.data[0];
+
+        const coord = { lat: parseFloat(lat), lon: parseFloat(lon) };
+
+        // Store coordinates in localStorage
+        localStorage.setItem(
+          "lastVisitedMarker",
+          JSON.stringify([coord.lat, coord.lon])
+        );
+
+        // Update map center
+        setMapCenter([coord.lat, coord.lon]);
+
+        console.log("Map Center Updated:", [coord.lat, coord.lon]);
+
+      } else {
+        setError("No results found for the provided location.");
+        setGotError(true);
+        console.error("No results found for the provided location.");
+      }
+    } catch (error) {
+      setError("Error fetching coordinates.");
+      setGotError(true);
+      console.error("Error fetching coordinates:", error);
+    }
+    return null; // Return null if coordinates could not be fetched
+  };
+
+  return (
+    <div>
+      <Navbar />
+      <Container>
+        <Box my={4}>
+          {loading && (
+            <Backdrop open={true}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          )}
+          {gotError && (
+            <Snackbar
+              open={gotError}
+              autoHideDuration={6000}
+              onClose={() => setGotError(false)}
+              message={error}
+              action={
+                <IconButton
+                  size="small"
+                  color="inherit"
+                  onClick={() => setGotError(false)}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              }
+            />
+          )}
+          <Box display="flex" justifyContent="center" mb={2}>
+            <TextField
+              variant="outlined"
+              size="small"
+              label="Search by Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              sx={{ mr: 1 }}
+            />
+            <Button
+              variant="outlined"
+              size="large"
+              startIcon={<SearchIcon />}
+              onClick={handleLocationChange}
+            >
+              Search
+            </Button>
+          </Box>
+          <MapContainer
+            center={mapCenter} 
+            zoom={7}
+            key={JSON.stringify(mapCenter)} 
+            style={{ height: "600px", width: "100%" }} 
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            {artworks.map(
+              (artwork) =>
+                artwork.latitude &&
+                artwork.longitude && (
+                  <Marker
+                    key={artwork._id}
+                    position={[artwork.latitude, artwork.longitude]}
+                    eventHandlers={{
+                      click: () => handleMarkerClick(artwork),
+                    }}
+                  >
+                    <Popup>
+                      {!selectedArtwork ||
+                      selectedArtwork._id !== artwork._id ? (
+                        <Card sx={{ maxWidth: 300 }}>
+                          <CardMedia
+                            component="img"
+                            height="200"
+                            image={artwork.imageUrl}
+                            alt={artwork.title}
+                          />
+                          <CardContent>
+                            <Typography
+                              gutterBottom
+                              variant="h6"
+                              component="div"
+                            >
+                              {artwork.title}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="textSecondary"
+                              component="p"
+                            >
+                              {artwork.description}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="textSecondary"
+                              component="p"
+                            >
+                              Date:{" "}
+                              {new Date(artwork.date).toLocaleDateString()}
+                            </Typography>
+                            <Box mt={2}>
+                              <Typography variant="subtitle2">
+                                Votes: {artwork.votes}
+                              </Typography>
+                              <Box
+                                mt={2}
+                                display="flex"
+                                justifyContent="space-between"
+                              >
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => handleVote(artwork._id)}
+                                >
+                                  Vote
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => handleProfile(artwork._id)}
+                                >
+                                  View Artist Profile
+                                </Button>
+                              </Box>
+                              <Box mt={2}>
+                                <Typography
+                                  variant="body2"
+                                  color="textSecondary"
+                                >
+                                  Share:
+                                </Typography>
+                                <Box
+                                  mt={1}
+                                  display="flex"
+                                  justifyContent="space-around"
+                                >
+                                  <WhatsappShareButton
+                                    url={window.location.href}
+                                    title={`Check out this artwork: ${artwork.title}`}
+                                    separator=" :: "
+                                  >
+                                    <WhatsappIcon size={32} round />
+                                  </WhatsappShareButton>
+                                  <FacebookShareButton
+                                    url={window.location.href}
+                                    quote={`Check out this artwork: ${artwork.title}`}
+                                    hashtag="#ArtworkMap"
+                                  >
+                                    <FacebookIcon size={32} round />
+                                  </FacebookShareButton>
+                                  <TwitterShareButton
+                                    url={window.location.href}
+                                    title={`Check out this artwork: ${artwork.title}`}
+                                  >
+                                    <TwitterIcon size={32} round />
+                                  </TwitterShareButton>
+                                </Box>
+                              </Box>
+                            </Box>
+                          </CardContent>
+                        </Card>
+                      ) : null}
+                    </Popup>
+                  </Marker>
+                )
+            )}
+          </MapContainer>
+          <Box mt={2} textAlign="center">
+            <Button variant="contained" color="primary" onClick={clearArtworks}>
+              Clear Artworks
+            </Button>
+          </Box>
+        </Box>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          message="Artworks updated"
+          action={
+            <IconButton
+              size="small"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          }
+        />
+        {selectedArtwork && (
+          <Dialog
+            open={true}
+            onClose={handleCloseDialog}
+            aria-labelledby="artwork-dialog-title"
+          >
+            <DialogTitle id="artwork-dialog-title">
+              {selectedArtwork.title}
+            </DialogTitle>
+            <DialogContent>
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <Card sx={{ maxWidth: 600 }}>
+                  <CardMedia
+                    component="img"
+                    height="300"
+                    image={selectedArtwork.imageUrl}
+                    alt={selectedArtwork.title}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h6" component="div">
+                      {selectedArtwork.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {selectedArtwork.description}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Date:{" "}
+                      {new Date(selectedArtwork.date).toLocaleDateString()}
+                    </Typography>
+                    <Box mt={2}>
+                      <Typography variant="subtitle2">
+                        Votes: {selectedArtwork.votes}
+                      </Typography>
+                      <Box mt={2} display="flex" justifyContent="space-between">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleVote(selectedArtwork._id)}
+                        >
+                          Vote
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleProfile(selectedArtwork._id)}
+                        >
+                          View Artist Profile
+                        </Button>
+                      </Box>
+                      <Box mt={2}>
+                        <Typography variant="body2" color="textSecondary">
+                          Share:
+                        </Typography>
+                        <Box
+                          mt={1}
+                          display="flex"
+                          justifyContent="space-around"
+                        >
+                          <WhatsappShareButton
+                            url={window.location.href}
+                            title={`Check out this artwork: ${selectedArtwork.title}`}
+                            separator=" :: "
+                          >
+                            <WhatsappIcon size={32} round />
+                          </WhatsappShareButton>
+                          <FacebookShareButton
+                            url={window.location.href}
+                            quote={`Check out this artwork: ${selectedArtwork.title}`}
+                            hashtag="#ArtworkMap"
+                          >
+                            <FacebookIcon size={32} round />
+                          </FacebookShareButton>
+                          <TwitterShareButton
+                            url={window.location.href}
+                            title={`Check out this artwork: ${selectedArtwork.title}`}
+                          >
+                            <TwitterIcon size={32} round />
+                          </TwitterShareButton>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Box>
+            </DialogContent>
+
+            <Button onClick={handleCloseDialog} color="primary">
+              Close
+            </Button>
+          </Dialog>
+        )}
+      </Container>
+    </div>
+  );
+};
+
+export default ArtworkMap;
