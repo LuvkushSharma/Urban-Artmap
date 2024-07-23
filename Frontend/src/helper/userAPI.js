@@ -9,7 +9,7 @@ const fetchUserData = async () => {
     return res.data.data.user;
   } catch (error) {
     console.error("Error fetching user data:", error);
-    throw error; // Re-throw the error for handling in components
+    throw error; 
   }
 };
 

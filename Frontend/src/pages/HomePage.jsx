@@ -68,8 +68,6 @@ const HomePage = () => {
           }
         );
 
-        console.log("response : ", response);
-
         const data = response.data;
 
         // Check if the response is empty

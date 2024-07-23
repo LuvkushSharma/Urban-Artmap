@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,6 +17,7 @@ const LoginPage = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -82,6 +84,7 @@ const LoginPage = () => {
           withCredentials: true,
         }
       );
+
 
       setIsFailed(false);
       setTimerStarts(true);
