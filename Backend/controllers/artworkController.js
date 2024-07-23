@@ -62,11 +62,65 @@ const getArtistByArtworkId = async (req, res) => {
   }
 }
 
+const getTopArtworks = async () => {
+
+     try {
+
+      const artworks = await Artwork.find({}, { voters: 0, __v: 0 , _id: 0});
+      
+      let topArtworks = {"1": [], "2": [], "3": []};
+      const topVotes = new Set();
+      
+      for (let i = 0; i < artworks.length; i++) topVotes.add(artworks[i].votes);
+
+      if (topVotes.size < 3) {
+        return topArtworks;
+      }
+
+      // Sort topVotes set in descending order
+      const sortedVotes = [...topVotes].sort((a, b) => b - a);
+
+      const RANK_ONE_VOTES = sortedVotes[0];
+      const RANK_TWO_VOTES = sortedVotes[1];
+      const RANK_THREE_VOTES = sortedVotes[2];
+
+      for (let i = 0; i < artworks.length; i++) {
+        if (artworks[i].votes === RANK_ONE_VOTES) {
+          topArtworks["1"].push(artworks[i]);
+        } else if (artworks[i].votes === RANK_TWO_VOTES) {
+          topArtworks["2"].push(artworks[i]);
+        } else if (artworks[i].votes === RANK_THREE_VOTES) {
+          topArtworks["3"].push(artworks[i]);
+        }
+      }
+
+      return topArtworks;
+    
+     } catch (err) {
+
+       console.log(err);
+     }
+};
+
+// Get top voted artworks
+const getTopVotedArtworks = async (req, res) => {
+  try {
+
+    const artworks = await getTopArtworks();
+    res.json(artworks);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 
 module.exports = {
   createArtwork,
   getArtworks,
   getArtworkById,
-  getArtistByArtworkId
+  getArtistByArtworkId,
+  getTopVotedArtworks
+
 };
 

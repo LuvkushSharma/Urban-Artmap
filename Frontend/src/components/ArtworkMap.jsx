@@ -1417,22 +1417,28 @@ const ArtworkMap = () => {
               label="Search by Location"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              sx={{ mr: 1 }}
+              sx={{ mr: 1, borderRadius: 2, boxShadow: 1 }}
             />
             <Button
               variant="outlined"
               size="large"
               startIcon={<SearchIcon />}
               onClick={handleLocationChange}
+              sx={{ borderRadius: 2, boxShadow: 1 }}
             >
               Search
             </Button>
           </Box>
           <MapContainer
-            center={mapCenter} 
-            zoom={7}
-            key={JSON.stringify(mapCenter)} 
-            style={{ height: "600px", width: "100%" }} 
+            center={mapCenter}
+            zoom={9}
+            key={JSON.stringify(mapCenter)}
+            style={{
+              height: "600px",
+              width: "100%",
+              borderRadius: "12px",
+              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+            }}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {artworks.map(
@@ -1445,16 +1451,29 @@ const ArtworkMap = () => {
                     eventHandlers={{
                       click: () => handleMarkerClick(artwork),
                     }}
+                    icon={L.divIcon({
+                      className: 'custom-icon',
+                      html: `<div style="
+                        width: 30px;
+                        height: 30px;
+                        background: url(${artwork.imageUrl}) no-repeat center center;
+                        background-size: cover;
+                        border-radius: 50%;
+                        border: 2px solid white;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                      "></div>`
+                    })}
                   >
                     <Popup>
-                      {!selectedArtwork ||
+                    {!selectedArtwork ||
                       selectedArtwork._id !== artwork._id ? (
-                        <Card sx={{ maxWidth: 300 }}>
+                        <Card sx={{ maxWidth: 300, boxShadow: 3, borderRadius: 2 }}>
                           <CardMedia
                             component="img"
                             height="200"
                             image={artwork.imageUrl}
                             alt={artwork.title}
+                            sx={{ borderRadius: 2, boxShadow: 2 }}
                           />
                           <CardContent>
                             <Typography
@@ -1492,6 +1511,7 @@ const ArtworkMap = () => {
                                   variant="contained"
                                   color="primary"
                                   onClick={() => handleVote(artwork._id)}
+                                  sx={{ boxShadow: 3 }}
                                 >
                                   Vote
                                 </Button>
@@ -1499,6 +1519,7 @@ const ArtworkMap = () => {
                                   variant="contained"
                                   color="primary"
                                   onClick={() => handleProfile(artwork._id)}
+                                  sx={{ boxShadow: 3 }}
                                 >
                                   View Artist Profile
                                 </Button>
@@ -1547,7 +1568,12 @@ const ArtworkMap = () => {
             )}
           </MapContainer>
           <Box mt={2} textAlign="center">
-            <Button variant="contained" color="primary" onClick={clearArtworks}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={clearArtworks}
+              sx={{ boxShadow: 3 }}
+            >
               Clear Artworks
             </Button>
           </Box>
@@ -1572,18 +1598,20 @@ const ArtworkMap = () => {
             open={true}
             onClose={handleCloseDialog}
             aria-labelledby="artwork-dialog-title"
+            sx={{ '& .MuiDialog-paper': { borderRadius: 2, boxShadow: 3 } }}
           >
             <DialogTitle id="artwork-dialog-title">
               {selectedArtwork.title}
             </DialogTitle>
             <DialogContent>
               <Box display="flex" alignItems="center" justifyContent="center">
-                <Card sx={{ maxWidth: 600 }}>
+                <Card sx={{ maxWidth: 600, boxShadow: 3, borderRadius: 2 }}>
                   <CardMedia
                     component="img"
                     height="300"
                     image={selectedArtwork.imageUrl}
                     alt={selectedArtwork.title}
+                    sx={{ borderRadius: 2, boxShadow: 2 }}
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h6" component="div">
@@ -1613,6 +1641,7 @@ const ArtworkMap = () => {
                           variant="contained"
                           color="primary"
                           onClick={() => handleVote(selectedArtwork._id)}
+                          sx={{ boxShadow: 3 }}
                         >
                           Vote
                         </Button>
@@ -1620,6 +1649,7 @@ const ArtworkMap = () => {
                           variant="contained"
                           color="primary"
                           onClick={() => handleProfile(selectedArtwork._id)}
+                          sx={{ boxShadow: 3 }}
                         >
                           View Artist Profile
                         </Button>
@@ -1672,3 +1702,5 @@ const ArtworkMap = () => {
 };
 
 export default ArtworkMap;
+
+                     

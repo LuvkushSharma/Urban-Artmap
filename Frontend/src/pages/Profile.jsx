@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Box,
-  Typography,
-  Button,
-  Input,
-  Container,
-  Card,
-  CardContent,
-  CardMedia,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Typography, Button, CircularProgress, TextField, IconButton, Input } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { fetchUserData } from "../helper/userAPI";
 import Navbar from "../components/Navbar";
+import './CSS_Files/Profile.css'; 
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -20,6 +14,9 @@ const Profile = () => {
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [newName, setNewName] = useState(name);
+  const [newEmail, setNewEmail] = useState(email);
 
   const baseUrl = "http://localhost:3000";
 
@@ -27,10 +24,11 @@ const Profile = () => {
     const fetchData = async () => {
       try {
         const userData = await fetchUserData();
-        
         setName(userData.name);
         setEmail(userData.email);
         setImageUrl(userData.cloudinaryImageUrl);
+        setNewName(userData.name);
+        setNewEmail(userData.email);
       } catch (error) {
         console.error("Profile fetch failed:", error);
       }
@@ -41,6 +39,8 @@ const Profile = () => {
   const handleImageChange = (event) => {
     setImage(event.target.files[0]);
   };
+
+  
 
   const handleImageUpload = async () => {
     try {
@@ -66,10 +66,12 @@ const Profile = () => {
       await axios.patch(
         `${baseUrl}/api/v1/users/update`,
         { cloudinaryImageUrl },
-        {headers: {
-          'Access-Control-Allow-Origin': '*', 
-          'Content-Type': 'application/json'
-      }, withCredentials: true }
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
 
       setImageUrl(cloudinaryImageUrl);
@@ -81,64 +83,130 @@ const Profile = () => {
     }
   };
 
+  const handleEditClick = () => {
+    setEditing(true);
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      // Update user schema with new name and email
+      await axios.patch(
+        `${baseUrl}/api/v1/users/updateMe`,
+        { name: newName, email: newEmail },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      setName(newName);
+      setEmail(newEmail);
+      setEditing(false);
+      
+    } catch (error) {
+      console.error("Profile update failed:", error);
+    }
+  };
+
+  const handleCancelClick = () => {
+    setNewName(name); // Reset to original values
+    setNewEmail(email);
+    setEditing(false);
+  };
+
   return (
     <>
-    <Navbar />
-    <Container maxWidth="lg" sx={{ mt: 5, background: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%)"}}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          mb: 5,
-          p: 5,
-        }}
-      >
-        <Card
-          sx={{
-            maxWidth: 350,
-            p: 4,
-            mb: 3,
-            borderRadius: 10,
-            bgcolor: "#0096c7",
-          }}
-        >
-          <CardContent>
-            <CardMedia
-              component="img"
-              sx={{ pt: 2, height: 250, borderRadius: "5%" }}
-              image={imageUrl ? imageUrl : "/default-avatar.png"}
-              alt="Profile Picture"
-            />
-            <Typography variant="h5" sx={{ mt: 2, mb: 1, fontWeight: 700 }}>
-              {name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {email}
-            </Typography>
-          </CardContent>
-        </Card>
+      <Navbar />
+      <div className="profile-container">
+        <div className="profile-card">
+          <img
+            className="profile-image"
+            src={imageUrl ? imageUrl : "/default-avatar.png"}
+            alt="Profile"
+          />
+          <div className="profile-content">
+            {editing ? (
+              <>
+                <TextField 
+                  label="Name" 
+                  value={newName} 
+                  onChange={(e) => setNewName(e.target.value)} 
+                  variant="outlined" 
+                  margin="normal" 
+                  fullWidth
+                />
+                <TextField 
+                  label="Email" 
+                  value={newEmail} 
+                  onChange={(e) => setNewEmail(e.target.value)} 
+                  variant="outlined" 
+                  margin="normal" 
+                  fullWidth
+                />
+                <div className="button-group">
+                  <Button 
+                    variant="contained" 
+                    startIcon={<SaveIcon />} 
+                    onClick={handleSaveClick} 
+                    className="save-button"
+                  >
+                    Save
+                  </Button>
+                  <Button 
+                    variant="outlined" 
+                    startIcon={<CancelIcon />} 
+                    onClick={handleCancelClick} 
+                    className="cancel-button"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <Typography variant="h5" className="profile-name">
+                  {name}
+                </Typography>
+                <Typography variant="body2" className="profile-email">
+                  {email}
+                </Typography>
+                <IconButton onClick={handleEditClick} className="edit-icon">
+                  <EditIcon />
+                </IconButton>
+              </>
+            )}
+          </div>
 
-        <Box mt={3}>
-          <Input type="file" onChange={handleImageChange} />
-          <Button
-            variant="contained"
-            onClick={handleImageUpload}
-            disabled={uploading}
-            sx={{
-              ml: 2,
-              backgroundColor: uploading ? "#adb5bd" : "#343a40",
-              color: uploading ? "#6c757d" : "#fff",
-              "&:hover": {
-                backgroundColor: uploading ? "#adb5bd" : "#495057",
-              },
-            }}
-          >
-            {uploading ? <CircularProgress size={24} /> : "Upload Image"}
-          </Button>
-        </Box>
-      </Box>
-    </Container>
+          <div className="upload-section">
+            <Input
+              type="file"
+              onChange={handleImageChange}
+              className="file-input"
+              id="file-upload"
+            />
+            <label htmlFor="file-upload">
+              <Button
+                variant="contained"
+                component="span"
+                className="choose-file-button"
+              >
+                Choose File
+              </Button>
+            </label>
+            <Button
+              variant="contained"
+              onClick={handleImageUpload}
+              disabled={uploading}
+              startIcon={uploading ? <CircularProgress size={24} color="inherit" /> : null}
+              className="upload-button"
+            >
+              {uploading ? "Uploading..." : "Upload Image"}
+            </Button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

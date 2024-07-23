@@ -38,7 +38,6 @@ function App() {
           </Routes>
         </Router>
       </main>
-      {/* <Footer /> */}
     </>
   );
 }

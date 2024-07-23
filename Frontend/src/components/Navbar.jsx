@@ -13,17 +13,48 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import BusinessCenterSharpIcon from '@mui/icons-material/BusinessCenterSharp';
-
 import { useMediaQuery } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { fetchUserData } from "./../helper/userAPI";
+import { styled } from '@mui/material/styles';
+
+// Define a custom styled button
+const NavbarButton = styled(Button)(({ theme }) => ({
+  color: 'white',
+  textTransform: 'none',
+  fontSize: '1rem',
+  position: 'relative',
+  overflow: 'hidden',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: '2px',
+    backgroundColor: '#00d4ff',
+    transform: 'scaleX(0)',
+    transformOrigin: 'bottom left',
+    transition: 'transform 0.3s ease',
+    zIndex: 1,
+  },
+  '&:hover::after': {
+    transform: 'scaleX(1)',
+  },
+  '&:hover': {
+    color: 'white',
+    '&::after': {
+      backgroundColor: '#00d4ff',
+    },
+  },
+}));
 
 const settings = ["Profile", "Logout"];
 
 function Navbar() {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width:470px)");
+  const isMobile = useMediaQuery("(max-width:830px)");
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -38,7 +69,6 @@ function Navbar() {
     const getUserData = async () => {
       try {
         const userData = await fetchUserData();
-       
         setUser(userData);
         setImageUrl(userData.cloudinaryImageUrl);
         setLoading(false);
@@ -114,6 +144,7 @@ function Navbar() {
       position="static"
       style={{
         background: `linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)`,
+        boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.5)",
         margin: 0,
         padding: 0,
       }}
@@ -140,7 +171,7 @@ function Navbar() {
             <Link to="/home" style={{ textDecoration: "none" }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <img
-                  src="https://res.cloudinary.com/dx2vel6vy/image/upload/v1721455274/nhj7wc5hrqxlxfpr1lko.jpg"
+                  src="/images/Logo.png"
                   alt="Art Map Logo"
                   style={{
                     height: 50,
@@ -150,7 +181,7 @@ function Navbar() {
                   }}
                 />
                 <Typography
-                  variant="h6"
+                  variant="h5"
                   noWrap
                   sx={{
                     fontFamily: "monospace",
@@ -197,23 +228,15 @@ function Navbar() {
           </Box>
           {!isMobile && (
             <Box
-              sx={{ flexGrow: 1, display: "flex", justifyContent: "center", "& Button": {
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "#00d4ff",
-                    color: "black",
-                  },
-                },
-              }}
+              sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}
             >
               {pages.map((page) => (
-                <Button
+                <NavbarButton
                   key={page}
                   onClick={() => handlePageClick(page)}
-                  sx={{ color: "white" }}
                 >
                   {page}
-                </Button>
+                </NavbarButton>
               ))}
             </Box>
           )}

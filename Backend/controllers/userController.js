@@ -23,42 +23,34 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-exports.updateMe = async (req, res, next) => {
-  // 1️⃣) Create error if user POSTs password data as we had created a separate handler for that in the authController.js
 
-  if (req.body.password || req.body.passwordConfirm) {
-    return next(
-      new AppError(
-        "This route is not for password updates. Please use /updateMyPassword",
-        400
-      )
-    );
+exports.updateNameEmail = catchAsync(async (req, res, next) => {
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return next(new AppError("Name and email are required", 400));
   }
 
-  // 2️⃣) Filtered out unwanted field names that are not allowed to be updated.
-  const filteredBody = filterObj(req.body, "name", "email");
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { name, email },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
-  // ---------- Lec_2 --------
-
-  // Adding photo property to the filteredBody object from req.filename
-
-  if (req.file) {
-    filteredBody.photo = req.file.filename;
+  if (!user) {
+    return next(new AppError("User not found", 404));
   }
-
-  // 3️⃣) Update user document
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
-    new: true,
-    runValidators: true,
-  });
 
   res.status(200).json({
     status: "success",
     data: {
-      user: updatedUser,
+      user,
     },
   });
-};
+});
 
 exports.getUser = async (req, res) => {
   const user = req.user;

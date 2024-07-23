@@ -12,7 +12,6 @@ const userController = require(path.join(
 ));
 
 
-
 const router = express.Router();
 
 router.route("/signup").post(authController.signUp);
@@ -31,6 +30,8 @@ router
 router
 .route("/update")
 .patch(authController.protect, userController.updateUserSchema);
+
+router.route("/updateMe").patch(authController.protect, userController.updateNameEmail);
 
 
 router.route("/forgotPassword").post(authController.forgotPassword);

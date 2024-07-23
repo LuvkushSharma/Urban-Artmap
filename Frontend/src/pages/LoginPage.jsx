@@ -14,6 +14,9 @@ const LoginPage = () => {
   const [isFailed, setIsFailed] = useState(false);
   const [timerStarts, setTimerStarts] = useState(false);
 
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -36,7 +39,34 @@ const LoginPage = () => {
     checkAuth();
   }, [navigate]);
 
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleLogin = async () => {
+
+    setLoading(true);
+    setErrors({});
+
+    if (!email) {
+      setErrors((prevErrors) => ({ ...prevErrors, email: "Email is required" }));
+      setLoading(false);
+      return;
+    }
+
+    if (!password) {
+      setErrors((prevErrors) => ({ ...prevErrors, password: "Password is required" }));
+      setLoading(false);
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setErrors((prevErrors) => ({ ...prevErrors, email: "Invalid email address" }));
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await axios.post(
         "http://localhost:3000/api/v1/users/login",
@@ -55,6 +85,7 @@ const LoginPage = () => {
 
       setIsFailed(false);
       setTimerStarts(true);
+      setLoading(false);
 
       setTimeout(() => {
         setTimerStarts(false);
@@ -62,8 +93,8 @@ const LoginPage = () => {
       }, 2000);
 
     } catch (error) {
-
       setIsFailed(true);
+      setLoading(false);
       setTimeout(() => {
         setIsFailed(false);
       }, 2000);
@@ -89,7 +120,7 @@ const LoginPage = () => {
         position: "relative",
       }}
     >
-      {/* Video Section */}
+     
       <Box
         sx={{
           width: "100%",
@@ -147,11 +178,9 @@ const LoginPage = () => {
               textAlign: "center",
             }}
           >
-            <video
-              src="https://designerapp.officeapps.live.com/designerapp/Media.ashx/?id=e19f9c37-e890-462c-91bc-bfb23bff0ac1.mp4&fileToken=636e9468-4312-4968-924b-9dacdf845648&dcHint=IndiaCentral"
-              autoPlay
-              loop
-              muted
+            <img
+              src="/images/Login.jpeg"
+              alt="Login"
               style={{
                 width: "100%",
                 height: "auto",
@@ -170,8 +199,11 @@ const LoginPage = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            error={Boolean(errors.email)}
+            helperText={errors.email}
             margin="normal"
             fullWidth
+            required
             sx={{ marginBottom: "1rem" }}
           />
 
@@ -183,6 +215,9 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             margin="normal"
             fullWidth
+            required
+            error={Boolean(errors.password)}
+            helperText={errors.password}
             sx={{ marginBottom: "1rem" }}
           />
 

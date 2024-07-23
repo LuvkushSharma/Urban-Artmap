@@ -1017,6 +1017,7 @@ import {
   Input,
   Paper,
   Grid,
+  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -1240,11 +1241,12 @@ const UploadArtworkScreen = () => {
     <>
       <Navbar />
       <Container maxWidth="md">
-        <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
-          <Typography variant="h4" component="h2" gutterBottom align="center">
-            Upload Artwork
+        <Paper elevation={8} sx={{ p: 4, mt: 4, mb:2 , borderRadius: 2, backgroundColor: "#f0f4f8" }}>
+          <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ mb: 2, fontWeight: 'bold', color: '#333' }}>
+            Upload Your Artwork
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Divider sx={{ mb: 3 }} />
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3}}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -1254,6 +1256,22 @@ const UploadArtworkScreen = () => {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#3f51b5",
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -1266,9 +1284,24 @@ const UploadArtworkScreen = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#3f51b5",
+                    },
+                  }}
                 />
               </Grid>
-              {/* Artist field is removed as it is fetched from session. */}
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
@@ -1279,6 +1312,22 @@ const UploadArtworkScreen = () => {
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#3f51b5",
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -1291,6 +1340,22 @@ const UploadArtworkScreen = () => {
                   value={story}
                   onChange={(e) => setStory(e.target.value)}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#3f51b5",
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -1301,10 +1366,54 @@ const UploadArtworkScreen = () => {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#3f51b5",
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Input type="file" onChange={handleImageChange} />
+                <label htmlFor="file-upload">
+                  <Input
+                    id="file-upload"
+                    type="file"
+                    onChange={handleImageChange}
+                    sx={{
+                      display: "none",
+                    }}
+                  />
+                  <Button
+                    variant="outlined"
+                    component="span"
+                    fullWidth
+                    sx={{
+                      mt: 2,
+                      borderColor: "#3f51b5",
+                      color: "#3f51b5",
+                      "&:hover": {
+                        borderColor: "#303f9f",
+                        color: "#303f9f",
+                      },
+                      fontSize: "16px",
+                      padding: "10px",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    Choose File
+                  </Button>
+                </label>
               </Grid>
               <Grid item xs={12}>
                 <Button
@@ -1314,15 +1423,26 @@ const UploadArtworkScreen = () => {
                   color="primary"
                   onClick={handleUpload}
                   disabled={uploading}
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{
+                    mt: 3,
+                    mb: 2,
+                    backgroundColor: "#3f51b5",
+                    "&:hover": {
+                      backgroundColor: "#303f9f",
+                    },
+                    fontSize: "16px",
+                    padding: "12px",
+                    borderRadius: "4px",
+                  }}
                 >
-                  {uploading ? <CircularProgress size={24} /> : "Submit"}
+                  {uploading ? <CircularProgress size={24} color="inherit" /> : "Submit"}
                 </Button>
               </Grid>
             </Grid>
           </Box>
         </Paper>
       </Container>
+    
     </>
   );
 };

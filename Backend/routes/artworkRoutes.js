@@ -13,11 +13,15 @@ const artworkController = require(path.join(
 
 const router = express.Router();
 
-router.route("/").post(authController.protect, authController.restrictTo('artist') , artworkController.createArtwork).get(artworkController.getArtworks);
-router.route('/:id').get(artworkController.getArtworkById);
-
+// Route to get top voted artworks
+router.route("/top-voted").get(artworkController.getTopVotedArtworks);
 router.route("/artist/:id").get(artworkController.getArtistByArtworkId);
 
+
+
+router.route("/").post(authController.protect, authController.restrictTo('artist') , artworkController.createArtwork).get(artworkController.getArtworks);
+router.route('/:id').get(artworkController.getArtworkById);
 router.route("/:id/vote").get(authController.protect , authController.voteArtwork);
+
 
 module.exports = router;

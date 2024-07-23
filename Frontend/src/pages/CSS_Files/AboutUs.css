@@ -1,0 +1,35 @@
+/* AboutUs.css */
+@keyframes floating-gradient {
+    0% {
+      background-position: 0 0;
+    }
+    25% {
+      background-position: 25% 0;
+    }
+    50% {
+      background-position: 50% 0;
+    }
+    75% {
+      background-position: 75% 0;
+    }
+    100% {
+      background-position: 100% 0;
+    }
+  }
+  
+  .gradient-text {
+    background: linear-gradient(90deg, #ff8a00, #e52e71, #9c27b0, #673ab7, #3f51b5);
+    background-size: 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: floating-gradient 12s infinite linear;
+  }
+  
+  .icon-container {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .icon-container:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }  

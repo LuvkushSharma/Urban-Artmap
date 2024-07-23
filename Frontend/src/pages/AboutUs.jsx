@@ -1,78 +1,86 @@
 import React from 'react';
 import { Typography, Container, Grid, Box, Link } from '@mui/material';
 import Navbar from '../components/Navbar';
+import './CSS_Files/AboutUs.css'; 
+import { FaHandshake, FaMapMarkerAlt, FaUserFriends } from 'react-icons/fa';
 
 function AboutUs() {
   return (
     <>
-    <Navbar />
-    <Container maxWidth="lg">
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography variant="h1" component="h1" align="center" gutterBottom>
-            About Crowdsourced Urban Art Map
-          </Typography>
+      <Navbar />
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <Typography variant="h1" component="h1" align="center" gutterBottom className="gradient-text">
+              About Crowdsourced Urban Art Map
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body1" align="justify" sx={{ lineHeight: 1.6 }}>
+              Urban art, encompassing graffiti, murals, and street installations, is a vibrant and ever-evolving expression of creativity. However,
+              its ephemeral nature and lack of centralized documentation often lead to underappreciation and potential loss. Crowdsourced Urban Art Map
+              was born from a passion for preserving this art form and fostering a global community of enthusiasts.
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h2" component="h2" align="center" sx={{ fontWeight: 'bold', mb: 2 }}>
+              Our Mission
+            </Typography>
+          </Grid>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Box className="icon-container" sx={{ mr: 2, width: '60px', height: '60px', borderRadius: '50%', background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <FaMapMarkerAlt size={24} color="#fff" />
+                </Box>
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Empowering Discovery</Typography>
+              </Box>
+              <Typography variant="body2" align="justify">
+                Our interactive map allows you to discover hidden gems in your city or embark on a virtual exploration of street art across the globe.
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Box className="icon-container" sx={{ mr: 2, width: '60px', height: '60px', borderRadius: '50%', background: 'linear-gradient(45deg, #FF5722 30%, #FFC107 90%)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <FaHandshake size={24} color="#fff" />
+                </Box>
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Preserving Legacy</Typography>
+              </Box>
+              <Typography variant="body2" align="justify">
+                By documenting and sharing details like artist names, creation dates, and stories behind the pieces, we contribute to the preservation of urban art for future generations.
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Box className="icon-container" sx={{ mr: 2, width: '60px', height: '60px', borderRadius: '50%', background: 'linear-gradient(45deg, #4CAF50 30%, #8BC34A 90%)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <FaUserFriends size={24} color="#fff" />
+                </Box>
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Community Building</Typography>
+              </Box>
+              <Typography variant="body2" align="justify">
+                We foster a space for interaction where users can vote on their favorite artworks, share discoveries on social media, and potentially connect with the artists themselves.
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h2" component="h2" align="center" sx={{ fontWeight: 'bold', mb: 2 }}>
+              Join the Movement
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body1" align="justify" sx={{ lineHeight: 1.6 }}>
+              Whether you're a seasoned urban art explorer or simply appreciate the beauty and message it conveys, we invite you to join our
+              community. Help us document this cultural phenomenon, celebrate artistic expression, and make urban art accessible to everyone.
+              Let's create a comprehensive and dynamic map that reflects the ever-changing canvas of our streets.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} textAlign="center">
+            <Link href="#" variant="body1" underline="none" sx={{ color: 'primary.main', fontWeight: 'bold', fontSize: '1.2rem', '&:hover': { textDecoration: 'underline' } }}>
+              Join Us Today!
+            </Link>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" align="justify">
-            Urban art, encompassing graffiti, murals, and street installations, is a vibrant and ever-evolving expression of creativity. However,
-            its ephemeral nature and lack of centralized documentation often lead to underappreciation and potential loss. Crowdsourced Urban Art Map
-            was born from a passion for preserving this art form and fostering a global community of enthusiasts.
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <h2>Our Mission</h2>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" align="justify">
-            We aim to create a collaborative platform where users can document, share, and explore urban artworks from around the world. Here's
-            how we strive to achieve this:
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Box component="span" sx={{ mr: 2, width: '50px', height: '50px', backgroundColor: 'primary.main', borderRadius: '50%' }} />
-            <Typography variant="body1">Empowering Discovery</Typography>
-          </Box>
-          <Typography variant="body2" align="justify">
-            Our interactive map allows you to discover hidden gems in your city or embark on a virtual exploration of street art across the globe.
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Box component="span" sx={{ mr: 2, width: '50px', height: '50px', backgroundColor: 'secondary.main', borderRadius: '50%' }} />
-            <Typography variant="body1">Preserving Legacy</Typography>
-          </Box>
-          <Typography variant="body2" align="justify">
-            By documenting and sharing details like artist names, creation dates, and stories behind the pieces, we contribute to the preservation of urban art for future generations.
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Box component="span" sx={{ mr: 2, width: '50px', height: '50px', backgroundColor: 'info.main', borderRadius: '50%' }} />
-            <Typography variant="body1">Community Building</Typography>
-          </Box>
-          <Typography variant="body2" align="justify">
-            We foster a space for interaction where users can vote on their favorite artworks, share discoveries on social media, and potentially connect with the artists themselves.
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <h2>Join the Movement</h2>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1" align="justify">
-            Whether you're a seasoned urban art explorer or simply appreciate the beauty and message it conveys, we invite you to join our
-            community. Help us document this cultural phenomenon, celebrate artistic expression, and make urban art accessible to everyone.
-            Let's create a comprehensive and dynamic map that reflects the ever-changing canvas of our streets.
-          </Typography>
-        </Grid>
-        <Grid item xs={12} textAlign="center">
-          <Link href="#" variant="body1" underline="none" sx={{ color: 'primary.main' }}>
-            Join Us Today!
-          </Link>
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
     </>
   );
 }
