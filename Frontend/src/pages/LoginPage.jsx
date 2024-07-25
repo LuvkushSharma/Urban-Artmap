@@ -18,12 +18,14 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/v1/users/checkAuth",
+          `${BASE_URL}/api/v1/users/checkAuth`,
           {
             headers: {
               "Access-Control-Allow-Origin": "*",
@@ -71,7 +73,7 @@ const LoginPage = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/users/login",
+        `${BASE_URL}/api/v1/users/login`,
         {
           email,
           password,

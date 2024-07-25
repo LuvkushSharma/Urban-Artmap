@@ -17,12 +17,12 @@ const ForgetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const baseUrl = "http://localhost:3000";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const handleForget = async () => {
     try {
       setLoading(true);
-      const res = await axios.post(`${baseUrl}/api/v1/users/forgotPassword`, {
+      const res = await axios.post(`${BASE_URL}/api/v1/users/forgotPassword`, {
         email,
       }, {headers: {
         'Access-Control-Allow-Origin': '*', 

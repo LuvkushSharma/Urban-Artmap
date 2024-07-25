@@ -26,14 +26,16 @@ const ArtistProfile = () => {
   const [artist, setArtist] = useState(null);
   const [artworks, setArtworks] = useState([]);
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
     const fetchArtistData = async () => {
         setLoading(true);
         try {
-          const artistResponse = await axios.get(`http://localhost:3000/api/v1/users/${artistId}`);
+          const artistResponse = await axios.get(`${BASE_URL}/api/v1/users/${artistId}`);
           setArtist(artistResponse.data.data.user);
           
-          const artworksResponse = await axios.get(`http://localhost:3000/api/v1/artworks/${artistId}`);
+          const artworksResponse = await axios.get(`${BASE_URL}/api/v1/artworks/${artistId}`);
           setArtworks(artworksResponse.data);
           
         } catch (error) {

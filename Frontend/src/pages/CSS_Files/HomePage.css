@@ -1,0 +1,21 @@
+
+  .floating-text {
+    background: linear-gradient(to right, #ffffff, #000000);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: floatColor 3s linear infinite;
+  }
+  
+  @keyframes floatColor {
+    0% {
+      color: linear-gradient(90deg, black 25%, white 50%, black 75%);
+    }
+    50% {
+      color: linear-gradient(90deg, black 25%, white 50%, black 75%);
+    }
+    100% {
+      color: linear-gradient(90deg, black 25%, white 50%, black 75%);
+    }
+  }

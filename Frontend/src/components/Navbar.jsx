@@ -12,7 +12,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import BusinessCenterSharpIcon from '@mui/icons-material/BusinessCenterSharp';
 import { useMediaQuery } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -33,7 +32,7 @@ const NavbarButton = styled(Button)(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '2px',
-    backgroundColor: '#00d4ff',
+    backgroundColor: 'white', // Underline color
     transform: 'scaleX(0)',
     transformOrigin: 'bottom left',
     transition: 'transform 0.3s ease',
@@ -45,7 +44,7 @@ const NavbarButton = styled(Button)(({ theme }) => ({
   '&:hover': {
     color: 'white',
     '&::after': {
-      backgroundColor: '#00d4ff',
+      backgroundColor: 'white',
     },
   },
 }));
@@ -63,7 +62,7 @@ function Navbar() {
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState("");
   
-  const baseUrl = "http://localhost:3000";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     const getUserData = async () => {
@@ -103,7 +102,7 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await axios.get(`${baseUrl}/api/v1/users/logout`, {
+      await axios.get(`${BASE_URL}/api/v1/users/logout`, {
         headers: {
           'Access-Control-Allow-Origin': '*', 
           'Content-Type': 'application/json'
@@ -143,7 +142,7 @@ function Navbar() {
     <AppBar
       position="static"
       style={{
-        background: `linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%)`,
+        backgroundColor: 'black', // Navbar background color
         boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.5)",
         margin: 0,
         padding: 0,
@@ -219,6 +218,7 @@ function Navbar() {
                   <Typography
                     textAlign="center"
                     onClick={() => handlePageClick(page)}
+                    style={{ color: 'black' }} // Page text color
                   >
                     {page}
                   </Typography>
@@ -272,6 +272,7 @@ function Navbar() {
                   <Typography
                     textAlign="center"
                     onClick={() => handleSettingClick(setting)}
+                    style={{ color: 'black' }} 
                   >
                     {setting}
                   </Typography>

@@ -19,12 +19,12 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const baseUrl = "http://localhost:3000";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const handleResetPassword = async () => {
     try {
       setLoading(true);
-      const res = await axios.patch(`${baseUrl}/api/v1/users/resetPassword/${token}`, {
+      const res = await axios.patch(`${BASE_URL}/api/v1/users/resetPassword/${token}`, {
         oldPassword,
         newPassword,
         confirmPassword,

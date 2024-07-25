@@ -18,14 +18,12 @@ import {
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Wave from "../components/Wave/Wave";
+import "./CSS_Files/HomePage.css"
+
 import { useNavigate } from "react-router-dom";
 
 const theme = createTheme({
-  palette: {
-    background: {
-      default: "#f0f0f0",
-    },
-  },
   typography: {
     h2: {
       fontWeight: 700,
@@ -46,6 +44,8 @@ const HomePage = () => {
   const [transform, setTransform] = useState("rotateY(0deg) rotateX(0deg)");
   const [topArtworks, setTopArtworks] = useState({});
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const Navigate = useNavigate();
 
   const rankLabels = {
@@ -58,7 +58,7 @@ const HomePage = () => {
     const fetchTopArtworks = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/artworks/top-voted",
+          `${BASE_URL}/api/v1/artworks/top-voted`,
           {
             headers: {
               "Access-Control-Allow-Origin": "*",
@@ -101,25 +101,69 @@ const HomePage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Navbar />
-      <Box sx={{ py: 5 }}>
+      <Box
+        sx={{
+          py: 5,
+          background: "linear-gradient(to bottom right, #22687FFF, #F2F8F8FF)",
+        }}
+      >
         <Container maxWidth="lg">
           <Grid container alignItems="center">
             <Grid item xs={12} md={6}>
               <Box
-                sx={{ pr: { md: 5 }, textAlign: { xs: "center", md: "left" } }}
+                sx={{
+                  pr: { md: 5 },
+                  textAlign: { xs: "center", md: "left" },
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: { xs: "center", md: "flex-start" },
+                  justifyContent: "center",
+                  height: "100%", // Ensure content aligns properly
+                }}
               >
                 <Typography
                   variant={isMobile ? "h4" : "h2"}
                   component="h1"
-                  sx={{ mb: 2 }}
+                  className="floating-text"
+                  sx={{
+                    mb: 2,
+                    fontWeight: 600,
+                    fontSize: isMobile ? "2rem" : "3.8rem",
+                  }}
                 >
                   Crowdsourced Urban Art Map
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 3 }}>
+
+                <Typography
+                  variant="body1"
+                  sx={{
+                    mb: 3,
+                    fontSize: isMobile ? "1rem" : "1.125rem", // Adjust font size for mobile
+                    textAlign: { xs: "center", md: "left" },
+                  }}
+                >
                   Document, share, and explore urban artworks from around the
                   world. Create a global map of urban creativity.
                 </Typography>
-                <Button variant="contained" sx={{ mt: 2, mb: 2 }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    mt: 2,
+                    mb: 2,
+                    padding: "12px 24px",
+                    borderRadius: "8px",
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+                    transform: "perspective(1px) translateZ(0)",
+                    transition: "all 0.3s ease-in-out",
+                    "&:hover": {
+                      boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.4)",
+                      transform: "translateY(-3px) scale(1.05)",
+                      backgroundColor: "#22687FFF",
+                    },
+                    backgroundColor: "#22687FFF",
+                  }}
+                  onClick={() => Navigate("/artwork-map")}
+                >
                   Start Exploring
                 </Button>
               </Box>
@@ -164,6 +208,7 @@ const HomePage = () => {
           </Grid>
         </Container>
       </Box>
+
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Divider variant="middle" sx={{ my: 4 }} />
         <Grid container spacing={3}>
@@ -537,6 +582,7 @@ const HomePage = () => {
         </Container>
       </Container>
       <Footer />
+      <Wave />
     </ThemeProvider>
   );
 };

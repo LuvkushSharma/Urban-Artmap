@@ -113,7 +113,7 @@ const ArtworkMap = () => {
     const fetchArtworks = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/artworks');
+        const response = await axios.get(`${BASE_URL}/api/v1/artworks`);
         const artworksWithGPS = await Promise.all(response.data.map(async (artwork) => {
           try {
             const gpsData = await fetchGPSData(artwork.imageUrl);
@@ -272,7 +272,7 @@ const ArtworkMap = () => {
     const fetchArtworks = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/artworks');
+        const response = await axios.get(`${BASE_URL}/api/v1/artworks`);
         const artworksWithGPS = await Promise.all(response.data.map(async (artwork) => {
           try {
             const gpsData = await fetchGPSData(artwork.imageUrl);
@@ -526,7 +526,7 @@ const ArtworkMap = () => {
     const fetchArtworks = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/artworks');
+        const response = await axios.get(`${BASE_URL}/api/v1/artworks`);
         const artworksWithGPS = await Promise.all(response.data.map(async (artwork) => {
           try {
             const gpsData = await fetchGPSData(artwork.imageUrl);
@@ -588,7 +588,7 @@ const ArtworkMap = () => {
 
   const handleVote = async (artworkId) => {
     try {
-      const response = await axios.post(`http://localhost:3000/api/v1/artworks/${artworkId}/vote`);
+      const response = await axios.post(`${BASE_URL}/api/v1/artworks/${artworkId}/vote`);
       const updatedArtwork = response.data;
       setArtworks(prevArtworks =>
         prevArtworks.map(artwork =>
@@ -785,7 +785,7 @@ const ArtworkMap = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/artworks"
+          `${BASE_URL}/api/v1/artworks`
         );
         const artworksWithGPS = await Promise.all(
           response.data.map(async (artwork) => {
@@ -861,7 +861,7 @@ const ArtworkMap = () => {
   const handleVote = async (artworkId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/v1/artworks/${artworkId}/vote`
+        `${BASE_URL}/api/v1/artworks/${artworkId}/vote`
         , {
           headers: {
             'Access-Control-Allow-Origin': '*', 
@@ -892,7 +892,7 @@ const ArtworkMap = () => {
   const handleProfile = async (artworkId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/v1/artworks/artist/${artworkId}`
+        `${BASE_URL}/api/v1/artworks/artist/${artworkId}`
       );
       const artistId = response.data._id;
       Navigate(`/artist/${artistId}`);
@@ -1219,6 +1219,7 @@ const ArtworkMap = () => {
   });
 
   const [location, setLocation] = useState("");
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const Navigate = useNavigate();
 
@@ -1227,7 +1228,7 @@ const ArtworkMap = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/artworks"
+          `${BASE_URL}/api/v1/artworks`
         );
         const artworksWithGPS = await Promise.all(
           response.data.map(async (artwork) => {
@@ -1303,7 +1304,7 @@ const ArtworkMap = () => {
   const handleVote = async (artworkId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/v1/artworks/${artworkId}/vote`,
+        `${BASE_URL}/api/v1/artworks/${artworkId}/vote`,
         {
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -1335,7 +1336,7 @@ const ArtworkMap = () => {
   const handleProfile = async (artworkId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/v1/artworks/artist/${artworkId}`
+        `${BASE_URL}/api/v1/artworks/artist/${artworkId}`
       );
       const artistId = response.data._id;
       Navigate(`/artist/${artistId}`);

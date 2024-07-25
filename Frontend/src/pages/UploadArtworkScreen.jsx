@@ -29,6 +29,9 @@ const UploadArtworkScreen = () => {
   const [uploading, setUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [location, setLocation] = useState("");
+
+  const BASE_URL = process.env.BASE_URL;
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -48,7 +51,7 @@ const UploadArtworkScreen = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/artworks",
+        `${BASE_URL}/api/v1/artworks`,
         data,
         {
           headers: {
@@ -253,6 +256,9 @@ const UploadArtworkScreen = () => {
   const [uploading, setUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [location, setLocation] = useState("");
+
+  const BASE_URL = process.env.BASE_URL;
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -272,7 +278,7 @@ const UploadArtworkScreen = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/artworks",
+        `${BASE_URL}/api/v1/artworks`,
         data,
         {
           headers: {
@@ -468,6 +474,9 @@ const UploadArtworkScreen = () => {
   const [location, setLocation] = useState("");
   const [latitude, setLatitude] = useState(null); // New state for latitude
   const [longitude, setLongitude] = useState(null); // New state for longitude
+
+  const BASE_URL = process.env.BASE_URL;
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -487,7 +496,7 @@ const UploadArtworkScreen = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/artworks",
+        `${BASE_URL}/api/v1/artworks`,
         data,
         {
           headers: {
@@ -708,6 +717,9 @@ const UploadArtworkScreen = () => {
   const [location, setLocation] = useState("");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+
+  const BASE_URL = process.env.BASE_URL;
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -727,7 +739,7 @@ const UploadArtworkScreen = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/artworks",
+        `${BASE_URL}/api/v1/artworks`,
         data,
         {
           headers: {
@@ -880,7 +892,7 @@ const UploadArtworkScreen = () => {
       console.log("Data being sent to backend:", data); // Debugging log
 
       const res = await axios.post(
-        "http://localhost:3000/api/v1/artworks",
+        `${BASE_URL}/api/v1/artworks`,
         data,
         {
           headers: {
@@ -1039,6 +1051,9 @@ const UploadArtworkScreen = () => {
   const [artistId, setArtistId] = useState(""); 
   const navigate = useNavigate();
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+
   const fetchArtistId = async () => {
     try {
      
@@ -1070,7 +1085,7 @@ const UploadArtworkScreen = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/artworks",
+        `${BASE_URL}/api/v1/artworks`,
         data,
         {
           headers: {
@@ -1218,7 +1233,7 @@ const UploadArtworkScreen = () => {
 
      
       const res = await axios.post(
-        "http://localhost:3000/api/v1/artworks",
+        `${BASE_URL}/api/v1/artworks`,
         data,
         {
           headers: {
@@ -1259,17 +1274,17 @@ const UploadArtworkScreen = () => {
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&:hover fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                     },
                     "& .MuiInputLabel-root": {
-                      color: "#3f51b5",
+                      color: "#000000",
                     },
                   }}
                 />
@@ -1287,17 +1302,17 @@ const UploadArtworkScreen = () => {
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&:hover fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                     },
                     "& .MuiInputLabel-root": {
-                      color: "#3f51b5",
+                      color: "#000000",
                     },
                   }}
                 />
@@ -1315,17 +1330,17 @@ const UploadArtworkScreen = () => {
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&:hover fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                     },
                     "& .MuiInputLabel-root": {
-                      color: "#3f51b5",
+                      color: "#000000",
                     },
                   }}
                 />
@@ -1343,17 +1358,17 @@ const UploadArtworkScreen = () => {
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&:hover fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                     },
                     "& .MuiInputLabel-root": {
-                      color: "#3f51b5",
+                      color: "#000000",
                     },
                   }}
                 />
@@ -1369,17 +1384,17 @@ const UploadArtworkScreen = () => {
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&:hover fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: "#3f51b5",
+                        borderColor: "#000000",
                       },
                     },
                     "& .MuiInputLabel-root": {
-                      color: "#3f51b5",
+                      color: "#000000",
                     },
                   }}
                 />
@@ -1400,11 +1415,11 @@ const UploadArtworkScreen = () => {
                     fullWidth
                     sx={{
                       mt: 2,
-                      borderColor: "#3f51b5",
-                      color: "#3f51b5",
+                      borderColor: "#000000",
+                      color: "#000000",
                       "&:hover": {
-                        borderColor: "#303f9f",
-                        color: "#303f9f",
+                        borderColor: "#000000",
+                        color: "#000000",
                       },
                       fontSize: "16px",
                       padding: "10px",
@@ -1426,9 +1441,9 @@ const UploadArtworkScreen = () => {
                   sx={{
                     mt: 3,
                     mb: 2,
-                    backgroundColor: "#3f51b5",
+                    backgroundColor: "#000000",
                     "&:hover": {
-                      backgroundColor: "#303f9f",
+                      backgroundColor: "#000000",
                     },
                     fontSize: "16px",
                     padding: "12px",

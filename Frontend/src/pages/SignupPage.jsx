@@ -44,7 +44,7 @@ const SignupPage = () => {
     return re.test(String(email).toLowerCase());
   };
 
-  const baseUrl = "http://localhost:3000";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,7 +85,7 @@ const SignupPage = () => {
 
       if (condn) {
         const response = await axios.post(
-          `${baseUrl}/api/v1/users/signup`,
+          `${BASE_URL}/api/v1/users/signup`,
           formData,
           {
             headers: {

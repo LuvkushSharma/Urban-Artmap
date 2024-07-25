@@ -43,7 +43,7 @@ const ContactUs = () => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
 
-  const baseUrl = "http://localhost:3000";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -57,7 +57,7 @@ const ContactUs = () => {
     event.preventDefault();
     axios
       .post(
-        `${baseUrl}/api/v1/users/contact`,
+        `${BASE_URL}/api/v1/users/contact`,
         { name, message },
         {
           headers: {

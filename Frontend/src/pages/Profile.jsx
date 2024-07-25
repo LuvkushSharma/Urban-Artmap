@@ -18,7 +18,7 @@ const Profile = () => {
   const [newName, setNewName] = useState(name);
   const [newEmail, setNewEmail] = useState(email);
 
-  const baseUrl = "http://localhost:3000";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +64,7 @@ const Profile = () => {
 
       // Update user schema with the Cloudinary image URL
       await axios.patch(
-        `${baseUrl}/api/v1/users/update`,
+        `${BASE_URL}/api/v1/users/update`,
         { cloudinaryImageUrl },
         {
           headers: {
@@ -91,7 +91,7 @@ const Profile = () => {
     try {
       // Update user schema with new name and email
       await axios.patch(
-        `${baseUrl}/api/v1/users/updateMe`,
+        `${BASE_URL}/api/v1/users/updateMe`,
         { name: newName, email: newEmail },
         {
           headers: {
