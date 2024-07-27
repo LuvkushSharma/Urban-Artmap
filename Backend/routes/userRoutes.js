@@ -39,4 +39,9 @@ router.route("/resetPassword/:token").patch(authController.resetPassword);
 
 router.route("/contact").post(authController.contactUs);
 
+// Otp routes 
+router.route("/sendOtp").post(userController.generateOtpAndSendEmail);
+router.route("/validateOtp").post(authController.protect , userController.validateOtp);
+
+
 module.exports = router;

@@ -3,21 +3,22 @@ const nodemailer = require("nodemailer");
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email ? user.email : "yos8760@gmail.com";
-    this.firstName = user.name.split(" ")[0];
+    this.firstName = user.name ? user.name.split(" ")[0] : "User";
+    this.otp = user?.otp ? user.otp : "No OTP provided";
     this.url = url;
     this.from = `Luvkush Sharma <${process.env.EMAIL_FROM}>`;
-    this.message = user.message ? user.message : "No message provided";
+    this.message = user?.message ? user.message : "No message provided";
   }
 
   newTransport() {
-      return nodemailer.createTransport({
-        host: process.env.BREVO_HOST,
-        port: process.env.BREVO_PORT,
-        auth: {
-          user: process.env.BREVO_USER,
-          pass: process.env.BREVO_PASSWORD,
-        },
-      });
+    return nodemailer.createTransport({
+      host: process.env.BREVO_HOST,
+      port: process.env.BREVO_PORT,
+      auth: {
+        user: process.env.BREVO_USER,
+        pass: process.env.BREVO_PASSWORD,
+      },
+    });
   }
 
   async sendWelcomeHTML() {
@@ -115,7 +116,9 @@ module.exports = class Email {
               </div>
             </div>
             <p>Ready to start your journey? Click the button below to complete your profile and begin exploring the world of urban art.</p>
-            <center><a href="${this.url}" class="button" style="display: inline-block; padding: 10px 20px; background-color: #ff6347; color: #fff; border-radius: 5px;">Complete Profile</a></center>
+            <center><a href="${
+              this.url
+            }" class="button" style="display: inline-block; padding: 10px 20px; background-color: #ff6347; color: #fff; border-radius: 5px;">Complete Profile</a></center>
           </main>
           <footer class="footer">
             <p>&copy; ${new Date().getFullYear()} Crowdsourced Urban Art Map</p>
@@ -134,8 +137,8 @@ module.exports = class Email {
       from: this.from,
 
       to: this.to,
-      subject: "Reset Your Password for Dost",
-      text: `Hi ${this.firstName},\n\nWelcome to Dost! Click here to complete your profile: ${this.url}`,
+      subject: "Reset Your Password for Urban Artmap",
+      text: `Hi ${this.firstName},\n\nWelcome to Urban Artmap! Click here to complete your profile: ${this.url}`,
       html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -216,7 +219,6 @@ module.exports = class Email {
   }
 
   async sendIssuesHTML() {
-
     const mailOptions = {
       from: this.from,
       to: this.to,
@@ -291,7 +293,155 @@ module.exports = class Email {
     };
 
     await this.newTransport().sendMail(mailOptions);
-  };
+  }
+
+  async sendOtpHTML() {
+    const mailOptions = {
+      from: this.from,
+      to: this.to,
+      subject: "Your OTP Code for Urban Artmap",
+      text: `Hi ${this.firstName},\n\nYour OTP code for accessing your account is ${this.otp}. This code will expire in 10 minutes.\n\nIf you did not request this, please ignore this email.`,
+      html: `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your OTP Code for Dost</title>
+        <style>
+          @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+          }
+          body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+          }
+          .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1.5s ease-in-out;
+          }
+          .logo {
+            width: 150px;
+            height: 150px;
+            background-image: url('https://res.cloudinary.com/dx2vel6vy/image/upload/v1721925945/orl2buuqnarfvcsjspax.jpg');
+            background-size: cover;
+            background-position: center;
+            display: inline-block;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+          }
+          .text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 30px;
+            animation: fadeIn 2s ease-in-out;
+          }
+          .otp {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            background: linear-gradient(45deg, #3498db, #8e44ad);
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 30px 0;
+            letter-spacing: 2px;
+            animation: popIn 2.5s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+          }
+          .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            margin-top: 30px;
+            animation: fadeIn 3s ease-in-out;
+          }
+          .cta {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px 0;
+            background-color: #3498db;
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            animation: popIn 3.5s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, transform 0.3s;
+          }
+          .cta:hover {
+            background-color: #297cb8;
+            transform: scale(1.05);
+          }
+          ul {
+            list-style-type: none;
+            padding: 0;
+            animation: fadeIn 2s ease-in-out;
+          }
+          ul li {
+            background: #f3f4f6;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <header class="header">
+            <div class="logo"></div>
+          </header>
+          <main class="text">
+            <p>Hi ${this.firstName},</p>
+            <p>Your OTP code for accessing your account is:</p>
+            <div class="otp">${this.otp}</div>
+            <p>This code will expire in 10 minutes. If you did not request this, please ignore this email.</p>
+            <p>While you're here, check out our latest features and updates:</p>
+            <ul>
+              <li>Explore new art pieces in your area</li>
+              <li>Connect with other art enthusiasts</li>
+              <li>Share your own creations with our community</li>
+            </ul>
+            <a href="https://yourwebsite.com" class="cta">Visit Urban Artmap</a>
+          </main>
+          <footer class="footer">
+            <p>&copy; ${new Date().getFullYear()} Dost</p>
+          </footer>
+        </div>
+      </body>
+      </html>
+      `,
+    };
+
+    await this.newTransport().sendMail(mailOptions);
+  }
 
   async sendWelcome() {
     await this.sendWelcomeHTML();
@@ -303,5 +453,9 @@ module.exports = class Email {
 
   async sendIssues() {
     await this.sendIssuesHTML();
+  }
+
+  async sendOtp() {
+    await this.sendOtpHTML();
   }
 };

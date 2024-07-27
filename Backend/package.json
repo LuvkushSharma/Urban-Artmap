@@ -27,6 +27,7 @@
     "nodemailer-brevo-transport": "^2.1.0",
     "nodemon": "^3.1.4",
     "path": "^0.12.7",
+    "redis": "^4.6.15",
     "stripe": "^16.1.0",
     "uuid": "^10.0.0",
     "validator": "^13.12.0"

@@ -87,14 +87,22 @@ const LoginPage = () => {
         }
       );
 
-
       setIsFailed(false);
       setTimerStarts(true);
       setLoading(false);
 
+      // Request OTP
+      const res2 = await axios.post(`${BASE_URL}/api/v1/users/sendOtp`, { email } , {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
       setTimeout(() => {
         setTimerStarts(false);
-        navigate("/home", { replace: true });
+        navigate('/otp', { replace: true });
       }, 2000);
 
     } catch (error) {
