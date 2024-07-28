@@ -80,7 +80,7 @@ const OTP = () => {
           </Alert>
         )}
         <Typography variant="h4" gutterBottom align="center">
-          Verify Your Email
+          2 FA (Two Factor Authentication)
         </Typography>
         <Typography variant="body1" align="center" sx={{ marginBottom: "1rem", color: "#555" }}>
           Please enter the OTP sent to your email address.
