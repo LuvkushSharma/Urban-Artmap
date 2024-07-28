@@ -1375,8 +1375,6 @@ const ArtworkMap = () => {
         // Update map center
         setMapCenter(newLocation);
 
-        console.log("Map Center Updated:", newLocation);
-
       } else {
         setError("No results found for the provided location.");
         setGotError(true);

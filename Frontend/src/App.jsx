@@ -23,26 +23,6 @@ import Spinner from "./components/Spinner";
 import OTP from "./pages/OTP";
 
 
-const words = `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths. Suddenly you become euphoric, docile. You accept your fate. It's all right here. Emergency water landing, six hundred miles an hour. Blank faces, calm as Hindu cows`;
-
-const pinData = {
-  title: "Aceternity UI",
-  href: "https://twitter.com/mannupaaji",
-  description: "Customizable Tailwind CSS and Framer Motion Components.",
-  backgroundColor:
-    "bg-gradient-to-br from-violet-500 via-purple-500 to-blue-500",
-};
-
-const cardData = {
-  title: "Lorem ipsum dolor sit amet.",
-  description:
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dignissimos, dolore.",
-  imageUrl:
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  linkUrl: "#",
-  buttonText: "Lorem, ipsum dolor.",
-};
-
 function App() {
   return (
     <Router>

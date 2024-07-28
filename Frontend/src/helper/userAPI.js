@@ -2,7 +2,7 @@ import axios from "axios";
 
 const fetchUserData = async () => {
   try {
-    const res = await axios.get("http://localhost:3000/api/v1/users/profile", {headers: {
+    const res = await axios.get("https://urban-artmap.onrender.com/api/v1/users/profile", {headers: {
       'Access-Control-Allow-Origin': '*', 
       'Content-Type': 'application/json'
   }, withCredentials: true });

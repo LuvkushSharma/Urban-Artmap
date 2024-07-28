@@ -223,7 +223,7 @@ exports.forgotPassword = async (req, res, next) => {
 
     try {
       // 3️⃣ ) Send it to user's email
-      const resetURL = `http://localhost:4000/resetPassword/${resetToken}`;
+      const resetURL = `http://localhost:5173/resetPassword/${resetToken}`;
 
       // --------- Lec_10 ----------
       await new Email(user, resetURL).sendPasswordReset();
@@ -252,6 +252,8 @@ exports.forgotPassword = async (req, res, next) => {
 };
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
+
+  console.log(req.body);
   
   // 1️⃣) Get user based on the token
   const hashedToken = crypto
@@ -280,6 +282,8 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   if (!isPasswordCorrect) {
     return next(new AppError("Old password is incorrect", 400));
   }
+
+  console.log("user : " , user);
 
   user.password = req.body.newPassword;
   user.passwordConfirm = req.body.confirmPassword;

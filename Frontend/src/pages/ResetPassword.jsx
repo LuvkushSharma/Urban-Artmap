@@ -40,6 +40,7 @@ const ResetPassword = () => {
       setTimeout(() => {
         navigate("/");
       }, 3000);
+      
     } catch (error) {
       setLoading(false);
       setError(

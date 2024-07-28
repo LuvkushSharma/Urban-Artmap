@@ -45,7 +45,7 @@ const userSchema = mongoose.Schema({
   role: {
     type: String,
     enum: ['artist', 'user'],
-    default: ['user'],
+    default: 'user',
   },
 
   cloudinaryImageUrl: {
