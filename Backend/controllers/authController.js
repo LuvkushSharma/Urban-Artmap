@@ -89,49 +89,52 @@ exports.logout = (req, res, next) => {
 
 
 exports.protect = catchAsync(async (req, res, next) => {
-  let token;
+  let token = "";
 
+ console.log ("req.cookies : ", req.cookies);
+ console.log ("req.headers : ", req.headers);
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt;
-  }
+   if (req.headers?.cookie) {
 
-  
-  // their is no token
-  if (!token) {
-    return next(
-      new AppError("You are not loggen in! Please login to get access", 401)
-    );
-  }
+     const [_, jwtValue] = req.headers.cookie.split('=');
 
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+     token = jwtValue;
+    
+   } else if (req.cookies?.jwt) {
+        
+        token = req.cookies?.jwt;
+   }
+ 
+   // their is no token
+   if (!token) {
 
-  const currentUser = await User.findById(decoded.id);
+     return next(new AppError ('You are not loggen in! Please login to get access' , 401));
+     
+   }
 
-  if (!currentUser) {
-    return next(
-      new AppError(
-        "The user belonging to this token does not longer exists.",
-        401
-      )
-    );
-  }
+ const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  if (currentUser.changedPasswordAfter(decoded.iat)) {
-    return next(
-      new AppError("User recently changed password! Please log in again.", 401)
-    );
-  }
+ const currentUser = await User.findById(decoded.id);
 
-  req.user = currentUser;
-  res.locals.user = currentUser;
+ if (!currentUser) {
+   return next(
+     new AppError(
+       "The user belonging to this token does not longer exists.",
+       401
+     )
+   );
+ }
 
-  next();
+ if (currentUser.changedPasswordAfter(decoded.iat)) {
+   return next(
+     new AppError("User recently changed password! Please log in again.", 401)
+   );
+ }
+
+ req.user = currentUser;
+ res.locals.user = currentUser;
+
+ next();
 });
 
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
