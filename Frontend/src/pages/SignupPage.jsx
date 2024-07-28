@@ -28,6 +28,7 @@ const SignupPage = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [timerStarts, setTimerStarts] = useState(false);
 
   const navigate = useNavigate();
 
@@ -96,7 +97,22 @@ const SignupPage = () => {
           }
         );
 
-        navigate("/home");
+        setTimerStarts(true);
+
+        // Request OTP
+        const res2 = await axios.post(`${BASE_URL}/api/v1/users/sendOtp`, { formData.email } , {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
+  
+        setTimeout(() => {
+          setTimerStarts(false);
+          navigate('/otp', { replace: true });
+        }, 2000);
+        
       } else {
         // Handle missing fields
         const newErrors = {};
