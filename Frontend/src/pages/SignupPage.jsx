@@ -100,7 +100,7 @@ const SignupPage = () => {
         setTimerStarts(true);
 
         // Request OTP
-        const res2 = await axios.post(`${BASE_URL}/api/v1/users/sendOtp`, { formData.email } , {
+        const res2 = await axios.post(`${BASE_URL}/api/v1/users/sendOtp`, { email : formData.email } , {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
