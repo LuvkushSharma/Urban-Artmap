@@ -114,13 +114,32 @@ const getTopVotedArtworks = async (req, res) => {
   }
 };
 
+const getArtworkDetails = async (req, res) => {
+  try {
+    const { locations } = req.body;
+
+    // Find artworks matching the given locations
+    const artworks = await Artwork.find({ title: { $in: locations } });
+
+    if (!artworks || artworks.length === 0) {
+      return res.status(404).json({ message: 'No artworks found' });
+    }
+
+    res.json(artworks);
+  } catch (error) {
+    console.error('Error fetching artwork details:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 
 module.exports = {
   createArtwork,
   getArtworks,
   getArtworkById,
   getArtistByArtworkId,
-  getTopVotedArtworks
+  getTopVotedArtworks,
+  getArtworkDetails
 
 };
 

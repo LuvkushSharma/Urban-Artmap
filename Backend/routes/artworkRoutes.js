@@ -18,10 +18,10 @@ router.route("/top-voted").get(artworkController.getTopVotedArtworks);
 router.route("/artist/:id").get(artworkController.getArtistByArtworkId);
 
 
-
 router.route("/").post(authController.protect, authController.restrictTo('artist') , artworkController.createArtwork).get(artworkController.getArtworks);
 router.route('/:id').get(artworkController.getArtworkById);
 router.route("/:id/vote").get(authController.protect , authController.voteArtwork);
 
+router.post('/get-details', artworkController.getArtworkDetails);
 
 module.exports = router;

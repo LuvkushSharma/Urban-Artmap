@@ -1,8 +1,12 @@
-import React, { Suspense, lazy} from "react";
+import React, { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 
 // Dynamically import the World component
-const World = lazy(() => import("./Aceternity_Components/Github_Globe/components/ui/globe").then((m) => ({ default: m.World })));
+const World = lazy(() =>
+  import("./Aceternity_Components/Github_Globe/components/ui/globe").then(
+    (m) => ({ default: m.World })
+  )
+);
 
 export default function Globe() {
   const globeConfig = {
@@ -393,10 +397,6 @@ export default function Globe() {
     },
   ];
 
-  
-
- 
-
   return (
     <div className="flex flex-row items-center justify-center py-20 h-screen md:h-auto dark:bg-black bg-white relative w-full">
       <div className="max-w-7xl mx-auto w-full relative overflow-hidden h-full md:h-[40rem] px-4">
@@ -407,15 +407,16 @@ export default function Globe() {
           className="div"
         >
           <h2 className="text-center text-xl md:text-4xl font-bold text-black dark:text-white">
-            We sell soap worldwide
+            Discover and Share Urban Art Worldwide
           </h2>
           <p className="text-center text-base md:text-lg font-normal text-neutral-700 dark:text-neutral-200 max-w-md mt-2 mx-auto">
-            This globe is interactive and customizable. Have fun with it, and
-            don&apos;t forget to share it. :)
+            This platform is interactive and community-driven. Explore,
+            document, and celebrate urban artworks from around the globe. Don't
+            forget to share your discoveries!
           </p>
         </motion.div>
         <div className="absolute w-full bottom-0 inset-x-0 h-40 bg-gradient-to-b pointer-events-none select-none from-transparent dark:to-black to-white z-40" />
-        <div className="absolute w-full -bottom-20 h-72 md:h-full z-10">
+        <div className="absolute w-full -bottom-20 h-72 md:h-full z-10 mt-3">
           <Suspense>
             <World data={sampleArcs} globeConfig={globeConfig} />
           </Suspense>

@@ -16,7 +16,7 @@ const Footer = () => {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Typography variant="body1">
-                <a href="/" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>Home</a>
+                <a href="/home" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>Home</a>
               </Typography>
               <Typography variant="body1">
                 <a href="/about" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>About Us</a>

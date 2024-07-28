@@ -1,10 +1,14 @@
 "use client";
 
-import PropTypes from 'prop-types'; // Import PropTypes for prop validation
-import { CardBody, CardContainer, CardItem } from "./Aceternity_Components/Aceternity_Card/components/ui/3d-card";
-import { Link } from "react-router-dom"; 
+import PropTypes from "prop-types"; // Import PropTypes for prop validation
+import {
+  CardBody,
+  CardContainer,
+  CardItem,
+} from "./Aceternity_Components/Aceternity_Card/components/ui/3d-card";
+import { Link } from "react-router-dom";
 
-const Card = ({ title, description, imageUrl, linkUrl, buttonText }) => {
+const CardEffect = ({ rank , title, description, imageUrl, linkUrl, buttonText }) => {
   return (
     <CardContainer className="inter-var">
       <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
@@ -12,6 +16,7 @@ const Card = ({ title, description, imageUrl, linkUrl, buttonText }) => {
           translateZ="50"
           className="text-xl font-bold text-neutral-600 dark:text-white"
         >
+          <span className="inline-block bg-emerald-500 text-white font-bold px-2 py-1 rounded-full mr-2">{rank}</span>
           {title}
         </CardItem>
 
@@ -38,14 +43,6 @@ const Card = ({ title, description, imageUrl, linkUrl, buttonText }) => {
             translateZ={20}
             as={Link}
             to={linkUrl}
-            target="_blank"
-            className="px-4 py-2 rounded-xl text-xs font-normal dark:text-white"
-          >
-            Try now →
-          </CardItem>
-          <CardItem
-            translateZ={20}
-            as="button"
             className="px-4 py-2 rounded-xl bg-black dark:bg-white dark:text-black text-white text-xs font-bold"
           >
             {buttonText}
@@ -56,7 +53,7 @@ const Card = ({ title, description, imageUrl, linkUrl, buttonText }) => {
   );
 };
 
-Card.propTypes = {
+CardEffect.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
@@ -64,4 +61,4 @@ Card.propTypes = {
   buttonText: PropTypes.string.isRequired,
 };
 
-export default Card;
+export default CardEffect;

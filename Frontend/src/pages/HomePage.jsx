@@ -19,7 +19,14 @@ import {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Wave from "../components/Wave/Wave";
-import "./CSS_Files/HomePage.css"
+import "./CSS_Files/HomePage.css";
+
+import { TextGenerateEffectMagic } from "../components/TextGenerateEffect";
+import CardEffect from "../components/AceternityCard";
+import {InfiniteMovingCardsCompo} from "../components/InfiniteMovingCards";
+import { AnimatedPin } from "../components/AnimatedPin";
+
+import testimonials from './data/testimonials.json'; 
 
 import { useNavigate } from "react-router-dom";
 
@@ -38,11 +45,16 @@ const theme = createTheme({
   },
 });
 
+const header_text =
+  "Document, share, and explore urban artworks from around the world. Create a global map of urban creativity.";
+
 const HomePage = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
 
   const [transform, setTransform] = useState("rotateY(0deg) rotateX(0deg)");
   const [topArtworks, setTopArtworks] = useState({});
+  const [recentArtworks, setRecentArtworks] = useState([]);
+
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -71,7 +83,7 @@ const HomePage = () => {
         const data = response.data;
 
         // Check if the response is empty
-        if (Object.keys(data).length === 0) {
+        if (data[1].length === 0) {
           setTopArtworks(null); // Hide section if all ranks are empty
         } else {
           setTopArtworks(data);
@@ -81,7 +93,34 @@ const HomePage = () => {
       }
     };
 
+    const fetchRecentArtworks = async () => {
+      const recentLocations = JSON.parse(localStorage.getItem("recentLocations")) || [];
+
+      if (recentLocations.length > 0) {
+        try {
+          const response = await axios.post(
+            `${BASE_URL}/api/v1/artworks/get-details`,
+            { locations: recentLocations },
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          );
+
+          setRecentArtworks(response.data);
+        } catch (error) {
+          console.error("Error fetching recent artworks:", error);
+        }
+      }
+    };
+
     fetchTopArtworks();
+    fetchRecentArtworks();
+
+
   }, []);
 
   const handleMouseMove = (e) => {
@@ -134,17 +173,8 @@ const HomePage = () => {
                   Crowdsourced Urban Art Map
                 </Typography>
 
-                <Typography
-                  variant="body1"
-                  sx={{
-                    mb: 3,
-                    fontSize: isMobile ? "1rem" : "1.125rem", // Adjust font size for mobile
-                    textAlign: { xs: "center", md: "left" },
-                  }}
-                >
-                  Document, share, and explore urban artworks from around the
-                  world. Create a global map of urban creativity.
-                </Typography>
+                <TextGenerateEffectMagic words={header_text} color="dark:text-white text-black"/>
+
                 <Button
                   variant="contained"
                   sx={{
@@ -208,8 +238,9 @@ const HomePage = () => {
           </Grid>
         </Container>
       </Box>
+    
 
-      <Container maxWidth="lg" sx={{ py: 5 }}>
+      <Container maxWidth="lg" sx={{ py: 5}}>
         <Divider variant="middle" sx={{ my: 4 }} />
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
@@ -300,6 +331,10 @@ const HomePage = () => {
             </Card>
           </Grid>
         </Grid>
+
+        </Container>
+        
+        <Container maxWidth="lg" sx={{ py: 5}}>
         <Box sx={{ mt: 5, display: "flex", alignItems: "center", gap: 3 }}>
           <Box
             sx={{
@@ -339,20 +374,52 @@ const HomePage = () => {
           </Box>
 
           <Box sx={{ width: "50%" }}>
-            <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
-              Our Mission
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 4 }}>
-              Our mission is to celebrate and preserve urban art through a
-              collaborative platform that brings people together to share and
-              explore the beauty of street art from around the world. Join us in
-              creating a lasting digital archive that honors the creativity and
-              culture of urban spaces.
-            </Typography>
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={{ mb: 4, textAlign: "center" }}
+          >
+            Our Mission
+          </Typography>
+            <TextGenerateEffectMagic words="Our mission is to celebrate and preserve urban art through a collaborative platform that brings people together to share and explore the beauty of street art from around the world. Join us in creating a lasting digital archive that honors the creativity and culture of urban spaces." color="text-black"/>
           </Box>
         </Box>
 
-        <Container maxWidth="lg" sx={{ py: 5 }}>
+        </Container>
+
+        <Box  maxWidth="2xl" sx={{ py: 5}}>
+          <Divider variant="middle" sx={{ my: 4 }} />
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={{ mb: 4, textAlign: "center" }}
+          >
+            Recently Visited Artworks
+          </Typography>
+
+          {recentArtworks.length > 0 ? (
+            <Grid container spacing={3}>
+              {recentArtworks.map((artwork, index) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={index} sx={{m: "auto"}}>
+                  <AnimatedPin
+                    title={artwork.title}
+                    href={`/artist/${artwork.artist.toString()}`}
+                    description={artwork.description}
+                    backgroundColor="bg-gradient-to-br from-violet-500 via-purple-500 to-blue-500"
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography variant="h6" sx={{ textAlign: "center", mt: 4 }}>
+              No recently visited artworks available.
+            </Typography>
+          )}
+        </Box>
+
+
+      
+        <Box maxWidth="2xl" sx={{ py: 5}}>
           <Divider variant="middle" sx={{ my: 4 }} />
           <Typography
             variant="h4"
@@ -361,79 +428,29 @@ const HomePage = () => {
           >
             Top Artworks
           </Typography>
+
           {topArtworks ? (
-            <Grid container spacing={3}>
+            <Grid container sx={{ backgroundColor: "#0a0908" }}>
               {Object.entries(topArtworks).map(([rank, artworks]) =>
                 artworks.map((artwork, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={`${rank}-${index}`}>
-                    <Badge badgeContent={rankLabels[rank]} color="primary">
-                      <Card
-                        sx={{
-                          height: "100%",
-                          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
-                          transition:
-                            "transform 0.3s ease, box-shadow 0.3s ease",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                            boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.3)",
-                          },
-                        }}
-                      >
-                        <Box
-                          component="img"
-                          sx={{
-                            height: 200,
-                            width: "100%",
-                            objectFit: "cover",
-                            backgroundColor: "#ddd",
-                          }}
-                          src={artwork.imageUrl}
-                          alt={artwork.title}
-                        />
-                        <CardContent>
-                          <Typography
-                            variant="h5"
-                            component="h3"
-                            sx={{ mb: 2 }}
-                          >
-                            {artwork.title}
-                          </Typography>
-                          <Typography variant="body1">
-                            {artwork.description}
-                          </Typography>
-                        </CardContent>
-                        <Box sx={{ p: 2, textAlign: "center" }}>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() =>
-                              handleProfile(artwork.artist.toString())
-                            }
-                            sx={{
-                              boxShadow: 3,
-                              transition:
-                                "transform 0.3s ease, box-shadow 0.3s ease",
-                              "&:hover": {
-                                transform: "scale(1.1)",
-                                boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.3)",
-                              },
-                            }}
-                          >
-                            View Artist Profile
-                          </Button>
-                        </Box>
-                      </Card>
-                    </Badge>
+                  <Grid item xs={12} sm={12} md={12} lg={6} key={`${rank}-${index}`}>
+                    <CardEffect
+                      rank={rankLabels[rank]}
+                      title={artwork.title}
+                      description={artwork.description}
+                      imageUrl={artwork.imageUrl}
+                      linkUrl={`/artist/${artwork.artist.toString()}`}
+                      buttonText="View Artist Profile"
+                    />
                   </Grid>
                 ))
               )}
-            </Grid>
-          ) : (
+            </Grid>) : (
             <Typography variant="h6" sx={{ textAlign: "center", mt: 4 }}>
               No top artworks available.
             </Typography>
           )}
-        </Container>
+        </Box>
 
         <Container maxWidth="lg" sx={{ py: 5 }}>
           <Divider variant="middle" sx={{ my: 4 }} />
@@ -499,88 +516,21 @@ const HomePage = () => {
             </Grid>
           </Grid>
         </Container>
-        <Container maxWidth="lg" sx={{ py: 5 }}>
-          <Divider variant="middle" sx={{ my: 4 }} />
+        <Container maxWidth="xl" sx={{ py: 3 }}>
+          <Divider variant="middle" sx={{ my: 1 }} />
           <Typography
             variant="h4"
-            component="h2"
-            sx={{ mb: 4, textAlign: "center" }}
+            component="h1"
+            sx={{ textAlign: "center" }}
           >
             User Testimonials
           </Typography>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <Card
-                sx={{
-                  height: "100%",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)", // Card shadow
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.05)", // Scale effect on hover
-                    boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.3)", // Enhanced shadow
-                  },
-                }}
-              >
-                <CardContent>
-                  <Typography variant="h5" component="h3" sx={{ mb: 2 }}>
-                    John Doe
-                  </Typography>
-                  <Typography variant="body1" sx={{ mb: 2 }}>
-                    "This platform is amazing! I've discovered so many hidden
-                    gems in my city."
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Card
-                sx={{
-                  height: "100%",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)", // Card shadow
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.05)", // Scale effect on hover
-                    boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.3)", // Enhanced shadow
-                  },
-                }}
-              >
-                <CardContent>
-                  <Typography variant="h5" component="h3" sx={{ mb: 2 }}>
-                    Jane Smith
-                  </Typography>
-                  <Typography variant="body1" sx={{ mb: 2 }}>
-                    "A fantastic way to connect with artists and fellow art
-                    lovers. Highly recommended!"
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Card
-                sx={{
-                  height: "100%",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)", // Card shadow
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.05)", // Scale effect on hover
-                    boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.3)", // Enhanced shadow
-                  },
-                }}
-              >
-                <CardContent>
-                  <Typography variant="h5" component="h3" sx={{ mb: 2 }}>
-                    Alex Johnson
-                  </Typography>
-                  <Typography variant="body1" sx={{ mb: 2 }}>
-                    "The best way to explore and appreciate street art from
-                    around the world."
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+
+          
+                <InfiniteMovingCardsCompo testimonials={testimonials}/>
+           
         </Container>
-      </Container>
+      {/* </Container> */}
       <Footer />
       <Wave />
     </ThemeProvider>

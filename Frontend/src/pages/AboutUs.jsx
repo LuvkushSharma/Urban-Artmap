@@ -3,6 +3,7 @@ import { Typography, Container, Grid, Box, Link } from '@mui/material';
 import Navbar from '../components/Navbar';
 import './CSS_Files/AboutUs.css'; 
 import { FaHandshake, FaMapMarkerAlt, FaUserFriends } from 'react-icons/fa';
+import Globe from "./../components/Globe";
 
 function AboutUs() {
   return (
@@ -15,16 +16,10 @@ function AboutUs() {
               About Crowdsourced Urban Art Map
             </Typography>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="body1" align="justify" sx={{ lineHeight: 1.6 }}>
-              Urban art, encompassing graffiti, murals, and street installations, is a vibrant and ever-evolving expression of creativity. However,
-              its ephemeral nature and lack of centralized documentation often lead to underappreciation and potential loss. Crowdsourced Urban Art Map
-              was born from a passion for preserving this art form and fostering a global community of enthusiasts.
-            </Typography>
-          </Grid>
+          <Globe />
           <Grid item xs={12}>
             <Typography variant="h2" component="h2" align="center" sx={{ fontWeight: 'bold', mb: 2 }}>
-              Our Mission
+              Our Vision
             </Typography>
           </Grid>
           <Grid container spacing={4}>

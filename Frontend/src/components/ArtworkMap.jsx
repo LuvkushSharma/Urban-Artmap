@@ -1285,11 +1285,15 @@ const ArtworkMap = () => {
   };
 
   const handleMarkerClick = (artwork) => {
+    
+    const newLocation = [artwork.latitude, artwork.longitude];
     setSelectedArtwork(artwork);
-    setMapCenter([artwork.latitude, artwork.longitude]);
+    setMapCenter(newLocation);
+    updateRecentLocations(artwork.title);
+
     localStorage.setItem(
       "lastVisitedMarker",
-      JSON.stringify([artwork.latitude, artwork.longitude])
+      JSON.stringify(newLocation)
     ); // Store coordinates in localStorage
   };
 
@@ -1360,16 +1364,18 @@ const ArtworkMap = () => {
 
         const coord = { lat: parseFloat(lat), lon: parseFloat(lon) };
 
+        const newLocation = [coord.lat, coord.lon];
+
         // Store coordinates in localStorage
         localStorage.setItem(
           "lastVisitedMarker",
-          JSON.stringify([coord.lat, coord.lon])
+          JSON.stringify(newLocation)
         );
 
         // Update map center
-        setMapCenter([coord.lat, coord.lon]);
+        setMapCenter(newLocation);
 
-        console.log("Map Center Updated:", [coord.lat, coord.lon]);
+        console.log("Map Center Updated:", newLocation);
 
       } else {
         setError("No results found for the provided location.");
@@ -1382,6 +1388,24 @@ const ArtworkMap = () => {
       console.error("Error fetching coordinates:", error);
     }
     return null; // Return null if coordinates could not be fetched
+  };
+
+  const getRecentLocations = () => {
+    const recentLocations = localStorage.getItem("recentLocations");
+    return recentLocations ? JSON.parse(recentLocations) : [];
+  };
+
+  const updateRecentLocations = (artworkTitle) => {
+    let recentLocations = getRecentLocations();
+    const locationExists = recentLocations.includes(artworkTitle);
+
+    if (!locationExists) {
+      if (recentLocations.length >= 3) {
+        recentLocations.shift();
+      }
+      recentLocations.push(artworkTitle);
+      localStorage.setItem("recentLocations", JSON.stringify(recentLocations));
+    }
   };
 
   return (
@@ -1705,3 +1729,4 @@ const ArtworkMap = () => {
 export default ArtworkMap;
 
                      
+
