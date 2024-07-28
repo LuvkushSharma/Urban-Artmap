@@ -12,6 +12,9 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const app = express();
 
+app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
+
 const corsOptions ={
   origin:'https://crowdsourced-urban-artmap.onrender.com', 
   credentials:true,           
@@ -21,10 +24,7 @@ const corsOptions ={
 app.use(cors(corsOptions));
 app.options('*' , cors(corsOptions));
 
-app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
-
-app.use(cookieParser());
 
 app.use (express.static (path.join (__dirname , 'public')));
 
