@@ -51,7 +51,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
 
   });
 
-  const url = `http://localhost:5173/profile`;
+  const url = `https://crowdsourced-urban-artmap.onrender.com/profile`;
 
   await new Email(newUser, url).sendWelcome();
 
@@ -220,7 +220,7 @@ exports.forgotPassword = async (req, res, next) => {
 
     try {
       // 3️⃣ ) Send it to user's email
-      const resetURL = `http://localhost:5173/resetPassword/${resetToken}`;
+      const resetURL = `https://crowdsourced-urban-artmap.onrender.com/resetPassword/${resetToken}`;
 
       // --------- Lec_10 ----------
       await new Email(user, resetURL).sendPasswordReset();
